@@ -1,0 +1,13 @@
+$determinant
+ [1] "contact hypothesis"            "contact theory"                "countervailing contact"        "direct contact"               
+ [5] "extended contact"              "extended contact theory"       "interethnic contact"           "intergroup contact"           
+ [9] "interracial contact"           "mediated contact"              "mediated contact theories"     "negative contact"             
+[13] "negative inter-ethnic contact" "negative inter-group contact"  "positive contact"              "positive inter-ethnic contact"
+[17] "positive intergroup contact"  
+
+$outcome
+ [1] "ethnic attitudes"                     "ethnic intergroup attitudes"          "ethnic prejudice"                    
+ [4] "immigrant attitudes"                  "intergroup attitudes"                 "positive ethnic intergroup attitudes"
+ [7] "prejudice"                            "prejudice reduction"                  "public attitudes"                    
+[10] "racial attitudes"                     "xenophobic attitudes"                
+

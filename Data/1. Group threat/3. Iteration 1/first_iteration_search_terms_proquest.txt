@@ -1,0 +1,13 @@
+$determinant
+ [1] "conflict theory"              "cultural threat"              "economic conditions"          "economic threat"              "ethnic diversity"            
+ [6] "ethnic group"                 "ethnic minority"              "group conflict"               "group members"                "group position"              
+[11] "group size"                   "group threat"                 "group threat theory"          "identity theory"              "immigrant population"        
+[16] "intergroup threat"            "majority group"               "minority group"               "minority population"          "perceived group threat"      
+[21] "perceived threat"             "racial group"                 "social dominance orientation" "social identity"              "symbolic racism"             
+[26] "symbolic threat"              "threat perceptions"           "threat theory"               
+
+$outcome
+ [1] "anti-immigrant attitudes" "anti-immigrant sentiment" "immigration attitudes"    "immigration policy"       "intergroup relations"     "negative attitudes"      
+ [7] "policy attitudes"         "policy preferences"       "positive attitudes"       "public attitudes"         "public opinion"           "racial attitudes"        
+[13] "racial prejudice"         "racial resentment"       
+

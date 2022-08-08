@@ -1,0 +1,11 @@
+$determinant
+ [1] "dominance orientation"        "ethnic group"                 "ethnic minority"              "group conflict"               "group identification"        
+ [6] "group members"                "group threat"                 "identity theory"              "immigrant group"              "intergroup conflict"         
+[11] "majority group"               "minority group"               "outgroup member"              "perceived threat"             "racial group"                
+[16] "right-wing authoritarianism"  "social dominance"             "social dominance orientation" "social identity"              "socioeconomic status"        
+[21] "threat perception"           
+
+$outcome
+ [1] "immigration attitudes" "immigration policies"  "intergroup attitudes"  "intergroup relations"  "negative attitude"     "positive attitude"     "prejudice"            
+ [8] "public attitude"       "public opinion"        "public support"        "racial attitudes"      "racial prejudice"     
+

@@ -1,0 +1,16 @@
+$determinant
+ [1] "collective action"            "dominance orientation"        "economic conditions"          "economic crisis"              "ethnic diversity"            
+ [6] "ethnic group"                 "ethnic identity"              "ethnic minority"              "group conflict"               "group identification"        
+[11] "group members"                "group threat"                 "identity theory"              "immigrant group"              "immigrant population"        
+[16] "ingroup members"              "intergroup conflict"          "intergroup threat"            "majority group"               "minority group"              
+[21] "minority population"          "outgroup member"              "perceived discrimination"     "perceived threat"             "racial group"                
+[26] "realistic threat"             "right-wing authoritarianism"  "social distance"              "social dominance"             "social dominance orientation"
+[31] "social group"                 "social identity"              "socioeconomic status"         "symbolic threat"              "threat perception"           
+[36] "threat theory"               
+
+$outcome
+ [1] "anti-immigrant attitudes"     "anti-immigrant sentiment"     "attitudes toward immigration" "immigration attitudes"        "immigration policies"        
+ [6] "intergroup anxiety"           "intergroup attitudes"         "intergroup relations"         "negative attitude"            "outgroup attitudes"          
+[11] "policy preferences"           "political attitudes"          "positive attitude"            "prejudice"                    "public attitude"             
+[16] "public opinion"               "public support"               "racial attitudes"             "racial prejudice"            
+

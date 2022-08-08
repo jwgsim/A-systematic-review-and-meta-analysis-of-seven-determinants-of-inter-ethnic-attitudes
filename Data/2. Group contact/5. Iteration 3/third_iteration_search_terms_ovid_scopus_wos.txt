@@ -1,0 +1,16 @@
+$determinant
+ [1] "contact experiences"          "contact hypothesis"           "contact theory"               "cultural diversity"           "direct contact"              
+ [6] "disadvantaged groups"         "ethnic diversity"             "ethnic group"                 "ethnic majority"              "ethnic minority"             
+[11] "extended contact"             "group dynamics"               "group identity"               "group interactions"           "group members"               
+[16] "group norms"                  "group process"                "group status"                 "identity theory"              "imagined contact"            
+[21] "improve intergroup"           "ingroup members"              "intergroup contact"           "majority group"               "majority group members"      
+[26] "minority group"               "minority group members"       "negative contact"             "outgroup member"              "personal contact"            
+[31] "positive contact"             "positive intergroup contact"  "racial group"                 "social contact"               "social dominance orientation"
+[36] "social group"                 "social identity"              "social identity theory"       "social interaction"          
+
+$outcome
+ [1] "group differences"        "intergroup anxiety"       "intergroup attitudes"     "intergroup conflict"      "intergroup relations"     "negative attitude"       
+ [7] "outgroup attitudes"       "perceived discrimination" "political attitudes"      "positive attitude"        "prejudice"                "prejudice reduction"     
+[13] "prejudicial attitudes"    "public attitude"          "public opinion"           "racial attitudes"         "racial prejudice"         "reduce prejudice"        
+[19] "social distance"         
+

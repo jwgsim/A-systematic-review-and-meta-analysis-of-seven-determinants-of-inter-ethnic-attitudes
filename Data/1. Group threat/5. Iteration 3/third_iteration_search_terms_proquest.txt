@@ -1,0 +1,11 @@
+$determinant
+ [1] "advantaged group"             "collective action"            "dominance orientation"        "ethnic group"                 "ethnic identity"             
+ [6] "ethnic minority"              "group conflict"               "group identification"         "group member"                 "group threat"                
+[11] "identity theory"              "immigrant group"              "intergroup conflict"          "majority group"               "minority group"              
+[16] "outgroup member"              "perceived discrimination"     "perceived threat"             "racial group"                 "right-wing authoritarianism" 
+[21] "social distance"              "social dominance"             "social dominance orientation" "social identity"              "social identity theory"      
+[26] "socioeconomic status"        
+
+$outcome
+[1] "intergroup attitudes" "intergroup relations" "negative attitude"    "positive attitude"    "prejudice"            "public attitude"      "public opinion"      
+

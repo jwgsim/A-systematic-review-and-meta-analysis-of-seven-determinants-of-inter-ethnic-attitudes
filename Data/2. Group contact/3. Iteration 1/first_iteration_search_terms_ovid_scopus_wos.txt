@@ -1,0 +1,20 @@
+$determinant
+ [1] "contact effects"               "contact experiences"           "contact hypothesis"            "contact intervention"         
+ [5] "contact quality"               "contact reduces prejudice"     "contact theory"                "cross-group friendship"       
+ [9] "direct contact"                "dominance orientation"         "ethnic diversity"              "ethnic group"                 
+[13] "ethnic majority"               "ethnic minority"               "extended contact"              "group identity"               
+[17] "group interactions"            "group norms"                   "imagined contact"              "immigrant groups"             
+[21] "indirect contact"              "ingroup identity"              "ingroup members"               "interethnic contact"          
+[25] "intergroup bias"               "intergroup contact"            "intergroup interaction"        "majority group"               
+[29] "majority group members"        "minority group"                "minority group members"        "negative contact"             
+[33] "negative intergroup contact"   "out-group members"             "outgroup contact"              "outgroup member"              
+[37] "personal contact"              "positive contact"              "positive intergroup contact"   "positive intergroup relations"
+[41] "right-wing authoritarianism"   "secondary transfer"            "social contact"                "social distance"              
+[45] "social dominance orientation"  "social identity"               "vicarious contact"            
+
+$outcome
+ [1] "ethnic attitudes"               "improved attitudes"             "improving intergroup relations" "intergroup attitudes"          
+ [5] "intergroup prejudice"           "intergroup relations"           "negative attitudes"             "outgroup attitudes"            
+ [9] "positive attitudes"             "positive intergroup attitudes"  "positive outgroup attitudes"    "racial attitudes"              
+[13] "reduce prejudice"              
+
