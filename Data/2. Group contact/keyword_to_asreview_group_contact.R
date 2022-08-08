@@ -2868,11 +2868,10 @@ v_star <- foo1 + foo2
 ##### References #####
 ######################
 
-# R-packages.
-packages <- c("remotes", "devtools", "revtools", "dplyr", "readr", "synthesisr", "litsearchr")
-for (i in 1:length(packages)){
-  print(citation(packages[i]))
-}
+## Session information and citation of packages used outside of base R.
+sessionInfo()
+out <- sessionInfo()
+out$otherPkgs
 
 # Gusenbauer, M., & Haddaway, N. R. (2020). Which academic search systems are suitable for systematic 
 # reviews or meta-analyses? Evaluating retrieval qualities of Google Scholar, PubMed, and 26 other 
@@ -2883,3 +2882,4 @@ for (i in 1:length(packages)){
 
 # Rose, S., Engel, D., Cramer, N., & Cowley, W. (2010). Automatic keyword extraction from individual 
 # documents. Text mining: applications and theory, 1, 1-20.
+
