@@ -1,0 +1,25 @@
+$determinant
+ [1] "alternative media"               "commercial television"           "communication technologies"      "communications media"            "computer-mediated communication"
+ [6] "digital media"                   "echo chambers"                   "information dissemination"       "information sources"             "information technology"         
+[11] "internet users"                  "interpersonal communication"     "local media"                     "mainstream media"                "mass media"                     
+[16] "media"                           "media-induced"                   "media attention"                 "media biases"                    "media campaigns"                
+[21] "media consumption"               "media content"                   "media coverage"                  "media discourse"                 "media ecology"                  
+[26] "media effect"                    "media environment"               "media exposure"                  "media frames"                    "media framing"                  
+[31] "media influence"                 "media literacy"                  "media messages"                  "media outlets"                   "media platform"                 
+[36] "media portrayals"                "media posts"                     "media reporting"                 "media reports"                   "media representation"           
+[41] "media role"                      "media salience"                  "media sites"                     "media sources"                   "media usage"                    
+[46] "media use"                       "media users"                     "national newspapers"             "negative media"                  "networking sites"               
+[51] "news coverage"                   "news exposure"                   "news media"                      "newspaper articles"              "newspaper coverage"             
+[56] "online media"                    "online public opinion"           "partisan media"                  "popular media"                   "press coverage"                 
+[61] "print media"                     "public service media"            "radio"                           "social marketing"                "social media"                   
+[66] "social media platform"           "social media posts"              "social media sites"              "social media users"              "social networking sites"        
+[71] "television"                      "television stations"             "television viewing"              "traditional media"               "twitter users"                  
+
+$outcome
+ [1] "anti-immigrant attitudes"     "anti-immigrant sentiments"    "anti-immigration attitudes"   "anti-immigration rhetoric"    "anti-immigration sentiments" 
+ [6] "anti-muslim prejudice"        "attitude change"              "attitudes toward immigration" "immigration attitudes"        "immigration policy"          
+[11] "intergroup attitudes"         "islamophobia"                 "muslim prejudice"             "negative attitude"            "outgroup attitudes"          
+[16] "policy attitudes"             "policy preferences"           "political attitudes"          "positive attitude"            "prejudice"                   
+[21] "public attitude"              "race relations"               "racial attitudes"             "reduce prejudice"             "social distance"             
+[26] "social exclusion"            
+

@@ -1,0 +1,22 @@
+$determinant
+ [1] "alternative media"       "commercial television"   "digital media"           "echo chambers"           "internet users"         
+ [6] "local media"             "mainstream media"        "mass media"              "media"                   "media-induced"          
+[11] "media bias"              "media biases"            "media consumption"       "media content"           "media coverage"         
+[16] "media discourse"         "media ecology"           "media effect"            "media environment"       "media exposure"         
+[21] "media framing"           "media influence"         "media messages"          "media outlets"           "media platform"         
+[26] "media portrayals"        "media posts"             "media reporting"         "media reports"           "media representation"   
+[31] "media role"              "media salience"          "media sources"           "media use"               "media users"            
+[36] "national newspapers"     "negative media"          "networking sites"        "news coverage"           "news exposure"          
+[41] "news media"              "newspaper articles"      "newspaper coverage"      "online media"            "online public opinion"  
+[46] "online social networks"  "opinion leaders"         "partisan media"          "political views"         "popular media"          
+[51] "press coverage"          "print media"             "public service media"    "radio"                   "social media"           
+[56] "social media platform"   "social media posts"      "social media users"      "social networking sites" "television"             
+[61] "television stations"     "traditional media"       "twitter users"          
+
+$outcome
+ [1] "anti-immigrant attitudes"     "anti-immigrant sentiments"    "anti-immigration attitudes"   "anti-immigration sentiments" 
+ [5] "anti-muslim prejudice"        "attitudes toward immigration" "immigration attitudes"        "intergroup relations"        
+ [9] "islamophobia"                 "muslim prejudice"             "negative attitude"            "policy preferences"          
+[13] "political attitudes"          "positive attitude"            "prejudice"                    "public attitude"             
+[17] "racial prejudice"             "shaping public opinion"       "social distance"             
+
