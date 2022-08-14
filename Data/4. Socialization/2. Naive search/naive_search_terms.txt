@@ -1,0 +1,15 @@
+$determinant
+ [1] "children"                       "classroom"                      "classroom heterogeneity"        "diverse classrooms"             "diverse friendship"            
+ [6] "diverse friendship networks"    "diverse schools"                "friends"                        "friends attitudes"              "friends influence"             
+[11] "friendship networks"            "immigrant friends"              "immigrant peers"                "ingroup friends"                "interethnic friendship"        
+[16] "intergenerational transmission" "intergroup friendships"         "outgroup friends"               "parent-offspring socialization" "parent socialization"          
+[21] "parental prejudice"             "prejudice transmission"         "parents"                        "parents attitudes"              "peer socialization"            
+[26] "peers"                          "peer anti-immigrant attitudes"  "peer prejudice"                 "prejudice transmission"         "prejudiced peers"              
+[31] "school"                         "school classroom"               "school classroom context"       "socialization"                  "socialization contexts"        
+[36] "socialization effects"         
+
+$outcome
+ [1] "anti-immigrant attitudes"    "anti-immigrant prejudice"    "anti-immigrant sentiment"    "attitude change"             "attitude development"       
+ [6] "inter-ethnic attitudes"      "negative attitudes"          "prejudice"                   "prejudice development"       "prejudice prevention"       
+[11] "prejudiced attitudes"        "prejudiced beliefs"          "racial intergroup attitudes" "racial prejudice"            "youth attitudes"            
+
