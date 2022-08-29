@@ -3,8 +3,8 @@ This repository contains files for replicating the manuscript "A systematic revi
 
 | Folder | Description |
 | ----------- | ----------- |
-| `Addendum A. Data Storage` | Folder containing files for reproducing the manuscript. |
-| `Addendum B. Registration and Reproducibility` | Registration and reproducibility files. |
+| `Addendum A. Registration` | Registration documents. |
+| `Addendum B. Data Storage` | Files required for reproducing the manuscript. |
 | `Addendum C. Privacy` | Privacy statement. |
 | `Addendum D. Permission and access` | Permission and access statement. |
 
