@@ -1,0 +1,13 @@
+$determinant
+ [1] "alternative media"            "changing media ecology"       "commercial television"        "echo chambers"                "media"                       
+ [6] "media-induced"                "media biases"                 "media ecology"                "media effect"                 "media environment"           
+[11] "media exposure"               "media induced"                "media reporting"              "media salience"               "news exposure"               
+[16] "media effect"                 "online media exposure"        "partisan media"               "pre-digital media"            "pre-digital media ecologies" 
+[21] "public service media"         "radio"                        "right-wing alternative media" "television"                   "television stations"         
+
+$outcome
+ [1] "anti-immigrant attitudes"       "anti-immigrant sentiments"      "anti-immigration attitudes"     "anti-immigration rhetoric"      "anti-immigration sentiments"   
+ [6] "anti-muslim prejudice"          "attitudes toward immigration"   "immigration attitudes"          "islamophobia"                   "media-induced islamophobia"    
+[11] "media-induced prejudice"        "muslim prejudice"               "negative attitudes"             "people's immigration attitudes" "political attitudes"           
+[16] "political views"                "prejudice"                      "promoting prejudice"            "public attitudes"               "public opinion"                
+

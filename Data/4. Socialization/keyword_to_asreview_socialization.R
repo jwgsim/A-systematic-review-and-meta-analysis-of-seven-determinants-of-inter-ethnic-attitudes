@@ -671,18 +671,18 @@ sum(round(as.numeric(check_recall(ex_socialization$title, naive_dedup$title)[, 3
 ### keyword information from the retrieved document set with author judgment to maximize coverage.
 
 ### Clear the environment except for the gold standard articles and "naive_dedup" objects. 
-rm(list=setdiff(ls(), c("gs_grouped_terms", "gs_group_contact", "ex_group_contact", "naive_dedup")))
+rm(list=setdiff(ls(), c("gs_grouped_terms", "gs_socialization", "ex_socialization", "naive_dedup")))
 
 ### Start by checking the naive search corpus for provided keywords, and keywords in titles and abstracts.
 ## Keywords.l
-length(naive_dedup$keywords) # Total number of documents is 2,043. 
-length(naive_dedup$keywords) - sum(is.na(naive_dedup$keywords)) # 2,041 of the articles list keywords.  
+length(naive_dedup$keywords) # Total number of documents is 13,305. 
+length(naive_dedup$keywords) - sum(is.na(naive_dedup$keywords)) # 13,083 of the articles list keywords.  
 ## Titles and abstracts.
 length(naive_dedup$title) - sum(is.na(naive_dedup$title)) # All of the articles list a title.  
-length(naive_dedup$abstract) - sum(is.na(naive_dedup$abstract)) # 1,982 of the articles list an abstract.  
+length(naive_dedup$abstract) - sum(is.na(naive_dedup$abstract)) # 12,113 of the articles list an abstract.  
 
 ### The first step is to obtain the keywords listed in the articles. We extract all non-single keywords that 
-### are listed a minimum of twenty times. Note that the twenty number is arbitrary insofar that we need to 
+### are listed a minimum of forty times. Note that the forty number is arbitrary insofar that we need to 
 ### strike a balance between retrieving enough but not too many keyword candidates. More specifically, 
 ### Gusenbauer & Haddaway (2020) note that search terms of length 25 should allow reviewers to specify their 
 ### search scope to a reasonable extent. Put differently, our Boolean search should contain at least 25 
@@ -696,49 +696,43 @@ length(naive_dedup$abstract) - sum(is.na(naive_dedup$abstract)) # 1,982 of the a
 tagged_keywords <- litsearchr::extract_terms(
   keywords = naive_dedup$keywords, # This is a list with the keywords from the articles. 
   method = "tagged", # Indicate that we want to obtain the keywords from the provided list.
-  min_freq = 20, # The keyword has to occur a minimum of twenty times to be included.   
+  min_freq = 40, # The keyword has to occur a minimum of forty times to be included.   
   ngrams = TRUE, # 'litsearchr' should only consider an ngram with a minimum of length n, 
   min_n = 2, # where n is equal to 2.
   language = "English") # 'litsearchr' should only consider English keywords.
-length(tagged_keywords) # 101 tagged keywords.
+length(tagged_keywords) # 333 tagged keywords.
 ### Now use the RAKE to obtain keywords from the titles and abstracts of naive search corpus. We extract all 
-### non-single keywords that occur at least twenty times in these titles and abstracts. 
+### non-single keywords that occur at least forty times in these titles and abstracts. 
 raked_keywords <- litsearchr::extract_terms(
   text = paste(naive_dedup$title, naive_dedup$abstract), # This is a list of titles and abstracts 
   # per gold standard article.
   method = "fakerake", # Indicate that 'litsearchr' should use the RAKE algorithm.
-  min_freq = 20, # The keyword has to occur a minimum of twenty times to be included.
+  min_freq = 40, # The keyword has to occur a minimum of forty times to be included.
   ngrams = TRUE, # 'litsearchr' should only consider an ngram with a minimum of length n, 
   min_n = 2, # where n is equal to 2.
   language = "English") # 'litsearchr' should only consider English keywords.
-length(raked_keywords) # 235 raked keywords.
+length(raked_keywords) # 607 raked keywords.
 ## Sum total of tagged and raked keywords. 
 keyword_candidates <- remove_redundancies(c(raked_keywords, tagged_keywords), closure = "full") # Remove 
 # duplicates.
-length(keyword_candidates) # Total of 286 keyword candidates. 
+length(keyword_candidates) # Total of 808 keyword candidates. 
 ## The subsequent task is to select all keywords that are relevant to our query from the candidate pool. I 
 ## select terms that relate in content to the relevant literature, i.e., are a independent or dependent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship. Note that I interpret 
+## variable of interest in the socialization on inter-ethnic attitudes relationship. Note that I interpret 
 ## relevance quite broadly, since these terms will be will be ranked and filtered further based on their 
 ## "connectedness" in a co-occurrence network. In that sense, it is better too be too liberal than too 
 ## selective in our choices here, since it might be hard to anticipate which relevant terms are important 
 ## from this "connectedness" perspective. I furthermore do not include keywords which relate directly to any 
-## of the other paradigms, e.g., I do not include keywords on group threat theory even though these might 
-## appear often in the group contact literature. Finally note that I do this part manually, which is prone to 
-## errors. 
+## of the other paradigms. Finally note that I do this part manually, which is prone to errors. 
 all_keywords <- keyword_candidates[
-  c(6, 18, 19, 20, 21, 22, 24, 26, 28, 32, 33, 35, 38, 41, 44, 45, 46, 47, 48, 49, 50, 55, 70, 72, 73, 74, 
-    76, 77, 79, 80, 82, 83, 89, 90, 91, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 105, 106, 107, 110, 111, 
-    112, 115, 116, 117, 118, 120, 121, 123, 125, 127, 131, 132, 133, 134, 135, 136, 137, 140, 142, 144, 145, 
-    149, 150, 151, 153, 157, 158, 168, 169, 170, 171, 172, 178, 180, 181, 182, 190, 193, 199, 200, 202, 204, 
-    231, 237, 238, 239, 243, 244, 246, 247, 248, 255, 256, 257, 263, 267, 271, 272, 274, 276, 278, 279, 283, 
-    285)
+  c(15, 16, 27, 28, 39, 40, 99, 104, 119, 132, 144, 145, 204, 209, 226, 227, 231, 270, 287, 298, 312, 346, 
+    360, 361, 362, 371, 382, 384, 385, 386, 401, 406, 407, 416, 418, 455, 456, 457, 458, 459, 460, 461, 496, 
+    501, 506, 516, 517, 541, 546, 582, 583, 602, 603, 604, 607, 613, 614, 631, 634, 658, 659, 662, 670, 671, 
+    672, 673, 690, 691, 692, 730, 731, 736, 750, 752, 760, 761, 791, 792, 796)
 ]
 ## Manual cleaning.
 (all_keywords <- sort(all_keywords))
-all_keywords[1] <- "group interactions" # Change "0410 group interactions" to "group interactions".
-(all_keywords <- sort(all_keywords))
-length(all_keywords) # 114 keyword candidates.
+length(all_keywords) # 79 keyword candidates.
 
 ### We further filter the keyword set by ranking the relative strength of each keyword in a so-called keyword 
 ### co-occurrence network (KCN). In a KCN, each keyword is "represented as a node and each co-occurrence of 
@@ -748,12 +742,16 @@ length(all_keywords) # 114 keyword candidates.
 ### manner represents cumulative knowledge of a domain and helps to uncover meaningful knowledge components 
 ### and insights based on the patterns and strength of links between keywords that appear in the literature" 
 ### (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). 
+all_keywords_final <- c()
+all_keywords_final <- append(all_keywords_final, c(as.vector(unlist(gs_grouped_terms)), all_keywords))
+all_keywords_final <- remove_redundancies(all_keywords_final, closure = "full") # Remove duplicates. 
+length(all_keywords_final) # 122 candidates.
 ## Build the keyword co-occurrence network. This chunk of code is a reworked version of the tutorial at: 
 ## https://luketudge.github.io/litsearchr-tutorial/litsearchr_tutorial.html.
 filter_dfm <- litsearchr::create_dfm(
   elements = paste(naive_dedup$title, naive_dedup$abstract), # The input in which the keywords can co-occur, 
   # titles and abstracts. 
-  features = all_keywords) # The keyword candidates. 
+  features = all_keywords_final) # The keyword candidates. 
 kcn <- create_network(filter_dfm) # Create a KCN.
 ## Rank keywords based on strength in the co-occurrence network.
 strengths <- strength(kcn) # Calculate strength values. 
@@ -761,47 +759,49 @@ data.frame(term = names(strengths), strength = strengths, row.names = NULL) %>%
   mutate(rank = rank(strength, ties.method = "min")) %>%
   arrange(desc(strength)) ->
   term_strengths # Create a data frame where the keywords are sorted by strength, in descending order. 
-## I now apply a filter to select 60 and 42 terms for the search string in ovid, scopus, and web of 
-## science, and ProQuest, respectively, where I remove terms which refer to an equivalent or near equivalent
-## concept, i.e., "target group" and "target groups", where I select the term with the highest strength 
-## value. Note that the 60 and 42 values were the result of trial-and-error in the respective search engines.
+## I now apply a filter to select 58 terms for the search string in ovid, proquest, scopus, and web of 
+## science, where I remove terms which refer to an equivalent or near equivalent concept, i.e., "target 
+## group" and "target groups", where I select the term with the highest strength value. Note that the 58 
+## number is arbitrary, and a result of a trial-and-error process which aimed to balance the number of 
+## retrieved documents and the incorporating of as many relevant search terms as possible.
 (term_strengths <- cbind(seq(length(term_strengths$term)), term_strengths[order(term_strengths$term), ]))
-term_strengths <- term_strengths[-c(2, 7, 9, 13, 20, 22, 32, 36, 37, 47, 52, 55, 62, 63, 66, 67, 73, 78, 89, 
-                                    92, 99, 100, 101), ]
+term_strengths <- term_strengths[-c(7, 15, 20, 23, 33, 37, 44, 47, 48, 60, 64, 68, 69, 70, 78, 80, 96, 98, 
+                                    100, 101, 103, 104), ]
 
-### Construct Boolean search OVID, Web of Science, and Scopus.
-## Select first 60 terms from filtered term set. 
-keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
-][1:60, ]$term)
+### Construct Boolean search OVID, ProQuest, Web of Science, and Scopus.
+## Select first 57 terms from filtered term set. 
+keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), ]
+                                         [1:57, ]$term)
+keywords_ovid_scopus_wos <- append(keywords_ovid_scopus_wos, 
+                                   c("peer socialization", "parental socialization", 
+                                     "ingroup socialization"))
 (keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1")
-sink("first_iteration_selected_terms_ovid_scopus_wos.txt")
-print(keywords_ovid_scopus_wos)
-sink() 
-## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or independent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship.
+keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[-c(3, 48)]
+keywords_ovid_scopus_wos
+## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or 
+## independent variable of interest in the socialization on inter-ethnic attitudes relationship.
 grouped_terms_ovid_scopus_wos <- list(
-  determinant = keywords_ovid_scopus_wos[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
-                                           21, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 37, 39, 40, 41, 43, 
-                                           44, 45, 47, 49, 50, 54, 55, 56, 57, 58, 59, 60)],
-  outcome = keywords_ovid_scopus_wos[c(11, 22, 23, 28, 32, 33, 38, 42, 46, 48, 51, 52, 53)])
+  determinant = keywords_ovid_scopus_wos[c(3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 27, 
+                                           28, 29, 30, 31, 32, 36, 37, 39, 42, 43, 44, 45, 46, 47, 48, 49,
+                                           50, 51, 52, 54, 55, 56, 57, 58)],
+  outcome = keywords_ovid_scopus_wos[c(1, 2, 8, 9, 10, 21, 22, 23, 25, 26, 33, 34, 35, 38, 40, 41, 53)])
 grouped_terms_ovid_scopus_wos
-### Given the grouped terms, write the Boolean search for OVID, Web of Science, and Scopus to the 
-### directory and print it to the console.  
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1") # Set directory.
+
+### Given the grouped terms, write the Boolean search for OVID and Web of Science to the directory and print 
+### it to the console.  
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1") # Set directory.
 write_search(
   grouped_terms_ovid_scopus_wos, # The list of determinant and outcome keywords identified in the naive 
-  # document set.
+  # document grouped_terms_ovid_scopus_wos
   languages = "English", # Language to write the search in, here set to English.
   exactphrase = TRUE, # Whether terms that consist of more than one word should be matched exactly rather 
   # than as two separate words. Set to TRUE, to limit both the scope and the number of redundant documents.
-  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch all 
-  # variants of the word. Set to TRUE.
+  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch 
+  # all variants of the word. Set to FALSE, because the number of retrieved documents is much too large if 
+  # it is set to TRUE.
   closure = "none", # Whether partial matches are matched at the left end of a word ("left"), at the right 
-  # ("right"), only as exact matches ("full"), or as any word containing a term ("none").  Set to "none" to 
-  # obtain as many documents as possible.  
+  # ("right"), only as exact matches ("full"), or as any word containing a term ("none"). Set to "none" to
+  # retrieve as many documents as possible.
   writesearch = TRUE) # Whether we would like to write the search text to a file in the current directory. 
 # Set to TRUE.
 bool <- capture.output(cat(read_file("search-inEnglish.txt"))) 
@@ -824,40 +824,32 @@ sink("first_iteration_search_terms_ovid_scopus_wos.txt")
 print(grouped_terms_ovid_scopus_wos)
 sink() 
 
-### Construct Boolean search ProQuest.
-## Select first 47 terms from filtered term set.
-keywords_proquest <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
-][1:48, ]$term)
-(keywords_proquest <- keywords_proquest[order(keywords_proquest)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1")
-sink("first_iteration_selected_terms_proquest.txt")
-print(keywords_proquest)
-sink() 
-## Categorize "keywords_proquest" object based on keyword being a potential dependent or independent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship.
-grouped_terms_proquest <- list(
-  determinant = keywords_proquest[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 22, 
-                                    23, 24, 26, 27, 28, 39, 31, 32, 34, 35, 37, 39, 43, 44, 45, 46)],
-  outcome = keywords_proquest[c(18, 21, 25, 30, 33, 36, 38, 40, 41, 42)])
-grouped_terms_proquest$outcome <- grouped_terms_proquest$outcome[-c(3)] # Remove "intergroup relations" 
-# because it severely blows up the search.
-grouped_terms_proquest
-### Given the grouped terms, write the the Boolean search for ProQuest to the directory and print it to the 
+### Given the grouped terms, write the Boolean search for ProQuest to the directory and print it to the 
 ### console.  
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1") # Set directory.
+grouped_terms_proquest <- vector()
+grouped_terms_proquest$determinant <- grouped_terms_ovid_scopus_wos$determinant
+grouped_terms_proquest$outcome <- grouped_terms_ovid_scopus_wos$outcome[-c(8)] # I remove the "intergroup 
+# relations" term because it severely blows up the search in ProQuest.
+keywords_proquest <- keywords_ovid_scopus_wos[-c(23)]
+## Finally save the grouped terms to a text file in the working directory. I do this to keep the search 
+## reproducible in case some previous chunk of code does not replicate for any particular reason.
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1") # Set directory.
+sink("first_iteration_search_terms_proquest.txt")
+print(grouped_terms_proquest)
+sink() 
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1") # Set directory.
 write_search(
-  grouped_terms_proquest, # The list of determinant and outcome keywords identified in the naive document 
-  # set.
+  grouped_terms_proquest, # The list of determinant and outcome keywords identified in the naive 
+  # document grouped_terms_ovid_proquest_scopus_wos
   languages = "English", # Language to write the search in, here set to English.
   exactphrase = TRUE, # Whether terms that consist of more than one word should be matched exactly rather 
   # than as two separate words. Set to TRUE, to limit both the scope and the number of redundant documents.
-  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch all 
-  # variants of the word. Set to TRUE.
+  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch 
+  # all variants of the word. Set to FALSE, because the number of retrieved documents is much too large if 
+  # it is set to TRUE in the ProQuest and Scopus databases.
   closure = "none", # Whether partial matches are matched at the left end of a word ("left"), at the right 
-  # ("right"), only as exact matches ("full"), or as any word containing a term ("none").  Set to "none" to 
-  # obtain as many documents as possible.  
+  # ("right"), only as exact matches ("full"), or as any word containing a term ("none"). Set to "none" to
+  # retrieve as many documents as possible.
   writesearch = TRUE) # Whether we would like to write the search text to a file in the current directory. 
 # Set to TRUE.
 bool <- capture.output(cat(read_file("search-inEnglish.txt"))) 
@@ -868,67 +860,64 @@ bool <- gsub("))", ")", bool, fixed = T)
 cat(bool)
 writeLines(bool, "bool_proquest_it1.txt")
 file.remove("search-inEnglish.txt") # Remove source file. 
-## Finally save the grouped terms to a text file in the working directory. I do this to keep the search 
-## reproducible in case some previous chunk of code does not replicate for any particular reason.
-sink("first_iteration_search_terms_proquest.txt")
-print(grouped_terms_proquest)
-sink() 
 
 ### Please refer to the naive iteration for an overview of the exact steps of the search procedure. 
 
-### All searches were conducted on 20-07-2022. These resulted in 2,884 documents from Ovid (Selection: 
-### PsycINFO), 956 from ProQuest (Selection: Sociological Abstracts), 3,092 documents from Scopus 
-### (Selection: Full index), and 3,966 documents from Web of Science (Selection: Web of Science Core 
-### Collection), for a total of 11,029 documents. Please note that this document set is unfiltered, i.e., 
-### duplicates, retracted documents, unidentified non-English documents, etc., have not yet been removed. In
-### Ovid, the documents were manually extracted in three batches. In ProQuest the documents were manually 
-### extracted in 100-sized batches. In Scopus, the documents were manually extracted in 2000 document sized 
-### batches, stratified by year. In Web of Science, the documents were manually extracted in 1000 document 
-### sized batches. 
+### The searches in Ovid, Scopus, and Web of Science were conducted on 24-08-2022. The search in ProQuest
+### was conducted on 25-08-2022. These searches resulted in 9,282 documents from Ovid (Selection: PsycINFO), 
+### 5,886 from ProQuest (Selection: Sociological Abstracts), 13,442 documents from Scopus (Selection: Full
+### index), and 14,935 documents from Web of Science (Selection: Web of Science Core Collection), for a 
+### total of 43,545 documents. Please note that this document set is unfiltered, i.e., duplicates, retracted 
+### documents, unidentified non-English documents, etc., have not yet been removed. In Ovid, the documents 
+### were manually extracted in three batches. In ProQuest the documents were manually extracted in 100-sized 
+### batches. In Scopus, the documents were manually extracted in 2000 document sized batches, stratified by 
+### year. In Web of Science, the documents were manually extracted in 1000 document sized batches. 
 
 ### Data import and cleaning.
 ## Import results of informed search. Note that the batches for each search system were merged in EndNote.
 ## Start by checking whether the imported length is equal to the length of the raw .ris files.
 import_ovid_it1 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iterat", 
+  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iterat", 
                      "ion 1/1. Unmerged/Ovid"),
   verbose = TRUE)
 import_proquest_it1 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iterat", 
+  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iterat", 
                      "ion 1/1. Unmerged/ProQuest"),
   verbose = TRUE)
 import_scopus_it1 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iterat", 
+  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iterat", 
                      "ion 1/1. Unmerged/Scopus"), 
   verbose = TRUE)
 import_wos_it1 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iterat", 
+  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iterat", 
                      "ion 1/1. Unmerged/Web of Science"),
   verbose = TRUE)
-length(import_ovid_it1$title) # 2,884, which is correct.  
-length(import_proquest_it1$title) # 956, which is correct.  
-length(import_scopus_it1$title) # 3,092, which is correct.
-length(import_wos_it1$title) # 3,966, which is correct.  
+length(import_ovid_it1$title) # 9,282, which is correct.  
+length(import_proquest_it1$title) # 5,886, which is correct.  
+length(import_scopus_it1$title) # 13,442, which is correct.
+length(import_wos_it1$title) # 14,935, which is correct.  
 
 ### We subsequently identify and remove identifiable, non-English documents. 
 ## Ovid.
 table(import_ovid_it1$language) # Ovid. All documents in the .ris file are in English. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Me",
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Me",
              "rged/Ovid/1. Raw"))
 write_refs(import_ovid_it1, format = "ris", tag_naming = "synthesisr", file = "ovid_r")
 ## ProQuest.
 table(import_proquest_it1$language) # ProQuest. All documents in the .ris file are in English.
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Me", 
+import_proquest_it1 <- import_proquest_it1[import_proquest_it1$language == "English" ,] # Select English 
+# documents and store them. 5,871 documents in ProQuest document set.
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Me", 
              "rged/ProQuest/1. Raw"))
 write_refs(import_proquest_it1, format = "ris", tag_naming = "synthesisr", file = "proquest_r")
 ## Scopus.
 table(import_scopus_it1$language) # Scopus. All documents in the .ris file are in English.
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Me", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Me", 
              "rged/Scopus/1. Raw"))
 write_refs(import_scopus_it1, format = "ris", tag_naming = "synthesisr", file = "scopus_r")
 ## Web of Science.
 table(import_wos_it1$language) # Web of Science. All documents in the .ris file are in English.
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Me", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Me", 
              "rged/Web of Science/1. Raw"))
 write_refs(import_wos_it1, format = "ris", tag_naming = "synthesisr", file = "web_of_science_r")
 
@@ -937,17 +926,17 @@ write_refs(import_wos_it1, format = "ris", tag_naming = "synthesisr", file = "we
 
 ### Ovid.
 ## Exact matching.
-length(import_ovid_it1$title) # Input is 2,884 documents.
+length(import_ovid_it1$title) # Input is 9,282 documents.
 exact_duplicates_ovid <- synthesisr::find_duplicates(
   import_ovid_it1$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
   to_lower = TRUE, # convert input to lower case;
   rm_punctuation = TRUE) # remove punctuation from input   
 (exact_manual <- synthesisr::review_duplicates(import_ovid_it1$title, exact_duplicates_ovid)) # Perform a 
-# manual check. One duplicate combination identified.
-sum(as.numeric(table(exact_duplicates_ovid) - 1)) # One document should be removed.
+# manual check. 
+sum(as.numeric(table(exact_duplicates_ovid) - 1)) # 27 documents should be removed.
 it1_dedup_ovid <- synthesisr::extract_unique_references(import_ovid_it1, exact_duplicates_ovid) 
-length(it1_dedup_ovid$title) # Output after exact matching is 2,883. One document removed.
+length(it1_dedup_ovid$title) # Output after exact matching is 9,255. 27 documents removed.
 ## Fuzzy matching five.
 fuzzy_duplicates_ovid <- find_duplicates( 
   it1_dedup_ovid$title, # Exact matching output as input;
@@ -956,11 +945,13 @@ fuzzy_duplicates_ovid <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default threshold of five. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_ovid$title, fuzzy_duplicates_ovid)) # Perform a 
-# manual check. One duplicate combination identified.
-sum(table(fuzzy_duplicates_ovid) - 1) # One document should be removed.
+# manual check. 2161, 6561, 7139, are not duplicate combinations. Remainings ones are.
+fuzzy_duplicates_ovid <- synthesisr::override_duplicates(fuzzy_duplicates_ovid, 
+                                                         c(2161, 6561, 7139)) 
+sum(table(fuzzy_duplicates_ovid) - 1) # Six documents should be removed.
 it1_dedup_ovid <- extract_unique_references(it1_dedup_ovid, fuzzy_duplicates_ovid) # Extract unique 
 # references. 
-length(it1_dedup_ovid$title) # De-duplicated output is 2,882. One document removed. 
+length(it1_dedup_ovid$title) # De-duplicated output is 9,249. Six documents removed. 
 ## Fuzzy matching ten.
 fuzzy_duplicates_ovid <- find_duplicates( 
   it1_dedup_ovid$title, # Exact matching output as input;
@@ -970,15 +961,15 @@ fuzzy_duplicates_ovid <- find_duplicates(
   threshold = 10) # increased threshold of ten. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_ovid$title, fuzzy_duplicates_ovid)) # Perform a 
 # manual check. No duplicate combinations identified.
-length(it1_dedup_ovid$title) # De-duplicated output is 2,882. Zero documents removed. 
+length(it1_dedup_ovid$title) # De-duplicated output is 9,249. Zero documents removed. 
 ## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Mer", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Mer", 
              "ged/Ovid/2. Deduplicated"))
 write_refs(it1_dedup_ovid, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_ovid")
 
 ### ProQuest. 
 ## Exact matching.
-length(import_proquest_it1$title) # Input is 956 documents.
+length(import_proquest_it1$title) # Input is 5,871 documents.
 exact_duplicates_proquest <- synthesisr::find_duplicates(
   import_proquest_it1$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
@@ -986,9 +977,9 @@ exact_duplicates_proquest <- synthesisr::find_duplicates(
   rm_punctuation = TRUE) # remove punctuation from input   
 (exact_manual <- synthesisr::review_duplicates(import_proquest_it1$title, exact_duplicates_proquest)) # All
 # combinations are duplicates.
-sum(as.numeric(table(exact_duplicates_proquest) - 1)) # 38 articles should be removed.
+sum(as.numeric(table(exact_duplicates_proquest) - 1)) # 285 articles should be removed.
 it1_dedup_proquest <- extract_unique_references(import_proquest_it1, exact_duplicates_proquest) 
-length(it1_dedup_proquest$title) # Output after exact matching is 918. 82 documents removed.
+length(it1_dedup_proquest$title) # Output after exact matching is 5,586. 285 documents removed.
 ## Fuzzy matching five.
 fuzzy_duplicates_proquest <- find_duplicates( 
   it1_dedup_proquest$title, # Exact matching output as input;
@@ -997,11 +988,13 @@ fuzzy_duplicates_proquest <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default threshold of five. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_proquest$title, fuzzy_duplicates_proquest)) # 
-# Perform a manual check. All combinations are duplicates.
-sum(table(fuzzy_duplicates_proquest) - 1) # Five documents should be removed.
+# Perform a manual check. 4828, 4828, 4828, 4828, 4829.
+fuzzy_duplicates_proquest <- synthesisr::override_duplicates(fuzzy_duplicates_proquest, 
+                                                         c(4828, 4828, 4828, 4828, 4829)) 
+sum(table(fuzzy_duplicates_proquest) - 1) # 22 documents should be removed.
 it1_dedup_proquest <- extract_unique_references(it1_dedup_proquest, fuzzy_duplicates_proquest) # 
 # Extract unique references. 
-length(it1_dedup_proquest$title) # De-duplicated output is 913. Five documents removed. 
+length(it1_dedup_proquest$title) # De-duplicated output is 5,564. 22 documents removed. 
 ## Fuzzy matching ten.
 fuzzy_duplicates_proquest <- find_duplicates( 
   it1_dedup_proquest$title, # Fuzzy matching five output as input;
@@ -1010,29 +1003,34 @@ fuzzy_duplicates_proquest <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 10) # increased threshold of ten. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_proquest$title, fuzzy_duplicates_proquest)) # 
-# Perform a manual check. No duplicate combinations identified.
-sum(table(fuzzy_duplicates_proquest) - 1) # Zero documents should be removed.
+# Perform a manual check. 384, 384, 384, 522, 533, 533, 684, 983, 2090, 2205, 4429, 4816, 4816, 4816, 4816, 
+# 4816, 4816, 4816, 4816.
+fuzzy_duplicates_proquest <- synthesisr::override_duplicates(fuzzy_duplicates_proquest, 
+                                                             c(384, 384, 384, 522, 533, 533, 684, 983, 2090, 
+                                                               2205, 4429, 4816, 4816, 4816, 4816, 4816, 
+                                                               4816, 4816, 4816)) 
+sum(table(fuzzy_duplicates_proquest) - 1) # Six documents should be removed.
 it1_dedup_proquest <- extract_unique_references(it1_dedup_proquest, fuzzy_duplicates_proquest) # Extract 
 # unique references. 
-length(it1_dedup_proquest$title) # De-duplicated output is 913. Zero documents removed. 
+length(it1_dedup_proquest$title) # De-duplicated output is 5,558. Six documents removed. 
 ## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Mer", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Mer", 
              "ged/ProQuest/2. Deduplicated"))
 write_refs(it1_dedup_proquest, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_proquest")
 
 ### Scopus.
 ## Exact matching.
-length(import_scopus_it1$title) # Input is 3,092 documents.
+length(import_scopus_it1$title) # Input is 13,442 documents.
 exact_duplicates_scopus <- synthesisr::find_duplicates(
   import_scopus_it1$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
   to_lower = TRUE, # convert input to lower case;
   rm_punctuation = TRUE) # remove punctuation from input   
 (exact_manual <- synthesisr::review_duplicates(import_scopus_it1$title, exact_duplicates_scopus)) # Perform a 
-# manual check. Four duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates_scopus) - 1)) # Three documents should be removed.
+# manual check. 
+sum(as.numeric(table(exact_duplicates_scopus) - 1)) # 21 documents should be removed.
 it1_dedup_scopus <- synthesisr::extract_unique_references(import_scopus_it1, exact_duplicates_scopus) 
-length(it1_dedup_scopus$title) # Output after exact matching is 3,089 . Seven documents removed.
+length(it1_dedup_scopus$title) # Output after exact matching is 13,421. 21 documents removed.
 ## Fuzzy matching five.
 fuzzy_duplicates_scopus <- find_duplicates( 
   it1_dedup_scopus$title, # Exact matching output as input;
@@ -1041,28 +1039,29 @@ fuzzy_duplicates_scopus <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default threshold of five. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_scopus$title, fuzzy_duplicates_scopus)) # Perform a 
-# manual check. Zero duplicate combinations identified.
-sum(table(fuzzy_duplicates_scopus) - 1) # Zero documents should be removed.
+# manual check. One duplicate combination identified.
+fuzzy_duplicates_scopus <- synthesisr::override_duplicates(fuzzy_duplicates_scopus, c(7888, 9752)) 
+sum(table(fuzzy_duplicates_scopus) - 1) # One documents should be removed.
 it1_dedup_scopus <- extract_unique_references(it1_dedup_scopus, fuzzy_duplicates_scopus) # Extract unique 
 # references. 
-length(it1_dedup_scopus$title) # De-duplicated output is 3,089. One document removed. 
+length(it1_dedup_scopus$title) # De-duplicated output is 13,420. One document removed. 
 ## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Mer", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Mer", 
              "ged/Scopus/2. Deduplicated"))
 write_refs(it1_dedup_scopus, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_scopus")
 
 ### Web of Science.
-length(import_wos_it1$title) # Input is 3,966 documents.
+length(import_wos_it1$title) # Input is 14,935 documents.
 exact_duplicates_wos <- synthesisr::find_duplicates(
   import_wos_it1$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
   to_lower = TRUE, # convert input to lower case;
   rm_punctuation = TRUE) # remove punctuation from input   
 (exact_manual <- synthesisr::review_duplicates(import_wos_it1$title, exact_duplicates_wos)) # Perform a 
-# manual check. Three duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates_wos) - 1)) # Three documents should be removed.
+# manual check. 
+sum(as.numeric(table(exact_duplicates_wos) - 1)) # Five documents should be removed.
 it1_dedup_wos <- synthesisr::extract_unique_references(import_wos_it1, exact_duplicates_wos) 
-length(it1_dedup_wos$title) # Output after exact matching is 3,963. Three documents removed.
+length(it1_dedup_wos$title) # Output after exact matching is 14,930. Five documents removed.
 ## Fuzzy matching five.
 fuzzy_duplicates_wos <- find_duplicates( 
   it1_dedup_wos$title, # Exact matching output as input;
@@ -1071,13 +1070,14 @@ fuzzy_duplicates_wos <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default threshold of five. 
 (fuzzy_manual <- synthesisr::review_duplicates(it1_dedup_wos$title, fuzzy_duplicates_wos)) # Perform a 
-# manual check. No duplicate combinations identified.
-sum(table(fuzzy_duplicates_wos) - 1) # Zero documents should be removed.
+# manual check. One duplicate combination identified.
+fuzzy_duplicates_wos <- synthesisr::override_duplicates(fuzzy_duplicates_wos, c(1634, 10275)) 
+sum(table(fuzzy_duplicates_wos) - 1) # One document should be removed.
 it1_dedup_wos <- extract_unique_references(it1_dedup_wos, fuzzy_duplicates_wos) # Extract unique 
 # references. 
-length(it1_dedup_wos$title) # De-duplicated output is 3,963. Zero documents removed. 
+length(it1_dedup_wos$title) # De-duplicated output is 14,929. One document removed. 
 ## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1/2. Mer", 
+setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Mer", 
              "ged/Web of Science/2. Deduplicated"))
 write_refs(it1_dedup_wos, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_wos")
 
@@ -1096,48 +1096,48 @@ ggVennDiagram(list(it1_dedup_ovid$title, it1_dedup_proquest$title, it1_dedup_sco
 
 ## Gold standard precision check. For convenience I assume that similarity scores > 0.5 are a match, and 
 ## those =< 0.5 are not.
-cbind(gs_group_contact$title, gs_group_contact$year)
+cbind(gs_socialization$title, gs_socialization$year)
 ## Ovid.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it1_dedup_ovid$title)[, 3]), 0)) # 2 of 6 gold 
+sum(round(as.numeric(check_recall(gs_socialization$title, it1_dedup_ovid$title)[, 3]), 0)) # 4 of 5 gold 
 # standard articles are retrieved.
 ## ProQuest.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it1_dedup_proquest$title)[, 3]), 0)) # 1 of 6 gold 
+sum(round(as.numeric(check_recall(gs_socialization$title, it1_dedup_proquest$title)[, 3]), 0)) # 4 of 5 gold 
 # standard articles are retrieved.
 ## Scopus.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it1_dedup_scopus$title)[, 3]), 0)) # 2 of 6 gold 
+sum(round(as.numeric(check_recall(gs_socialization$title, it1_dedup_scopus$title)[, 3]), 0)) # 5 of 5 gold 
 # standard articles are retrieved. 
 ## Web of Science.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it1_dedup_wos$title)[, 3]), 0)) # 3 of 6 gold 
+sum(round(as.numeric(check_recall(gs_socialization$title, it1_dedup_wos$title)[, 3]), 0)) # 4 of 5 gold 
 # standard articles are retrieved.
 ## The gold standard precision check tentatively indicates that Web of Science has the highest precision, 
-## followed by Scopus and Ovid, and finally ProQuest. This precision has furthermore decreased 
-## for ProQuest (-2), Scopus (-1), and Web of Science (-3), and stayed constant for Ovid (+0). 
+## followed by Scopus and Ovid, and finally ProQuest. This precision has remained constant in Ovid (0), 
+## ProQuest (0), Scopus (0), and Web of Science (0).
 
 ## External precision check. For convenience I assume that similarity scores > 0.5 are a match, and 
 ## those =< 0.5 are not.
-cbind(ex_group_contact$title, ex_group_contact$year) # Data frame of title and year of publication of 98 
+cbind(ex_socialization$title, ex_socialization$year) # Data frame of title and year of publication of 98 
 # external articles.
 ## Ovid.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup_ovid$title)[, 3]), 0)) # 32 of 98 
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup_ovid$title)[, 3]), 0)) # 16 of 39 
 # external articles are retrieved.
 ## ProQuest.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup_proquest$title)[, 3]), 0)) # 18 of 98 
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup_proquest$title)[, 3]), 0)) # 14 of 39 
 # external articles are retrieved.
 ## Scopus.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup_scopus$title)[, 3]), 0)) # 36 of 98 
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup_scopus$title)[, 3]), 0)) # 26 of 39 
 # external articles are retrieved.
 ## Web of Science.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup_wos$title)[, 3]), 0)) # 45 of 98 
-# external articles are retrieved.
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup_wos$title)[, 3]), 0)) # 24 of 39 
+# external articles are retrieved.  
 ## The external precision check tentatively indicates that Web of Science has the highest precision, 
 ## followed by Scopus, Ovid, and ProQuest, respectively. Relative to the naive search, the precision with 
-## respect to the external articles has increased slightly in Ovid (+2) and Scopus (+1). It has decreased 
-## slightly in ProQuest (-1), and quite significantly in Web of Science (-11). 
+## respect to the external articles has increased in Ovid (+4), ProQuest (+4), Scopus (+7), and Web of 
+## Science (+1). 
 
 ### Remove duplicates between corpora and combine the various corpora into a .ris file.
 it1_dedup <- bind_rows(it1_dedup_ovid, it1_dedup_proquest, it1_dedup_scopus, it1_dedup_wos) # Merge corpora. 
 ## Exact matching.
-length(it1_dedup$title) # Input is 10,847 documents.
+length(it1_dedup$title) # Input is 43,156 documents.
 exact_duplicates <- synthesisr::find_duplicates(
   it1_dedup$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
@@ -1145,10 +1145,10 @@ exact_duplicates <- synthesisr::find_duplicates(
   rm_punctuation = TRUE) # remove punctuation from input   
 exact_manual <- synthesisr::review_duplicates(it1_dedup$title, exact_duplicates) # Perform a 
 # manual check.
-length(exact_manual$title) # Sum of 7,638 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates) - 1)) # 4,829 documents should be removed.
+length(exact_manual$title) # Sum of 26,796 duplicate combinations identified.
+sum(as.numeric(table(exact_duplicates) - 1)) # 16,259 documents should be removed.
 it1_dedup <- synthesisr::extract_unique_references(it1_dedup, exact_duplicates) 
-length(it1_dedup$title) # Output after exact matching is 6,018. 4,829 documents removed. 
+length(it1_dedup$title) # Output after exact matching is 26,897. 16,259 documents removed. 
 ## Fuzzy matching five.
 fuzzy_duplicates <- find_duplicates(
   it1_dedup$title, # Exact match documents as input;
@@ -1157,12 +1157,19 @@ fuzzy_duplicates <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default cutoff. 
 fuzzy_manual <- review_duplicates(it1_dedup$title, fuzzy_duplicates) # Perform a manual check.
-length(fuzzy_manual$title) # 623 potential duplicate combinations. I check these candidates manually. Note 
+length(fuzzy_manual$title) # 2233 potential duplicate combinations. I check these candidates manually. Note 
 # that this procedure is prone to error.
-fuzzy_manual$title[1:623] # All combinations are duplicates.
-sum(table(fuzzy_duplicates) - 1) # 314 document should be removed.
+fuzzy_manual$title[1:500] # 2161, 2161, 2161, are not duplicate combinations. Remaining ones are. 
+fuzzy_manual$title[501:1000] # 6026 is not a duplicate combination. Remaining ones are. 
+fuzzy_manual$title[1001:1500] # 6561, 7139, 9111, are not duplicate combinations. Remaining ones are. 
+fuzzy_manual$title[1501:2223] # 12480, 12480, 12480, 12480, 13001, 13001, 24024, are not duplicate 
+# combinations. Remaining ones are. 
+fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(2161, 2161, 2161, 6026, 6561, 7139, 
+                                                                        9111, 12480, 12480, 12480, 12480, 
+                                                                        13001, 13001, 24024)) 
+sum(table(fuzzy_duplicates) - 1) # 1,115 document should be removed.
 it1_dedup <- extract_unique_references(it1_dedup, fuzzy_duplicates) # Extract unique references.
-length(it1_dedup$title) # De-duplicated output is 5,704. 314 documents were removed.
+length(it1_dedup$title) # De-duplicated output is 25,782. 1,115 documents were removed.
 ## Fuzzy matching ten.
 fuzzy_duplicates <- find_duplicates(
   it1_dedup$title, # Fuzzy matching five output as input;
@@ -1171,12 +1178,32 @@ fuzzy_duplicates <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 10) # increased cutoff. 
 fuzzy_manual <- synthesisr::review_duplicates(it1_dedup$title, fuzzy_duplicates) # Perform a manual check. 
-length(fuzzy_manual$title) # 184 duplicate combinations.
-fuzzy_manual # 67, 103, 1803, 2297, 2823, are not duplicate combinations. 
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(67, 103, 1803, 2297, 2823)) 
-sum(table(fuzzy_duplicates) - 1) # 87 documents should be removed.
+length(fuzzy_manual$title) # 1060 duplicate combinations.
+fuzzy_manual$title[1:500] # 161, 239, 323, 1199, 1199, 1199, 1664, 1717, 2017, 2017, 2017, 2017, 2017, 2017,
+# 2047, 2047, 2047, 2268, 2268, 2268, 2268, 2268, 2268, 2268, 2268, 2482, 2482, 2482, 2911, 2911, 3096, 3124,
+# 3250, 3604, 3697, 3844, 3908, 4249, 4258, 4485, 4670, 4682, 4788, 4788, 4788, 4893, 5460, 5460, 5637, 5655,
+# 5733, 5814, 5814, 5915, 5915, 5915, 5915, 5915, 5915, 6003, 6311, 6470, 6697, 6878, 6878, 7115, 7120, 7120, 
+# 7205, 7351, 7526, 7620, 7620, 8340, 8345, 8345, 8345, 8345, 8345, 8345, 8349, 8569, 8804, 8910, 8912, are 
+# not duplicate combinations. 
+fuzzy_manual$title[501:1060] # 9554, 9554, 9554, 9554, 9647, 12084, 12390, 12390, 12390, 12390, 12390, 12390,
+# 12390, 12390, 12894, 12894, 12894, 14700, 15003, 15801, 22660, 23539, are not duplicate combinations. 
+fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
+                                                    c(161, 239, 323, 1199, 1199, 1199, 1664, 1717, 2017, 
+                                                      2017, 2017, 2017, 2017, 2017, 2047, 2047, 2047, 2268, 
+                                                      2268, 2268, 2268, 2268, 2268, 2268, 2268, 2482, 2482, 
+                                                      2482, 2911, 2911, 3096, 3124, 3250, 3604, 3697, 3844, 
+                                                      3908, 4249, 4258, 4485, 4670, 4682, 4788, 4788, 4788, 
+                                                      4893, 5460, 5460, 5637, 5655, 5733, 5814, 5814, 5915, 
+                                                      5915, 5915, 5915, 5915, 5915, 6003, 6311, 6470, 6697, 
+                                                      6878, 6878, 7115, 7120, 7120, 7205, 7351, 7526, 7620, 
+                                                      7620, 8340, 8345, 8345, 8345, 8345, 8345, 8345, 8349, 
+                                                      8569, 8804, 8910, 8912, 9554, 9554, 9554, 9554, 9647, 
+                                                      12084, 12390, 12390, 12390, 12390, 12390, 12390, 12390, 
+                                                      12390, 12894, 12894, 12894, 14700, 15003, 15801, 22660, 
+                                                      23539)) 
+sum(table(fuzzy_duplicates) - 1) # 447 documents should be removed.
 it1_dedup <- extract_unique_references(it1_dedup, fuzzy_duplicates) # Extract unique references. 
-length(it1_dedup$title) # De-duplicated output is 5,617. 87 document removed. 
+length(it1_dedup$title) # De-duplicated output is 25,335. 447 documents removed. 
 ## Fuzzy matching fifteen.
 fuzzy_duplicates <- find_duplicates(
   it1_dedup$title, # Fuzzy matching ten output as input;
@@ -1185,50 +1212,99 @@ fuzzy_duplicates <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 15) # increased cutoff. 
 fuzzy_manual <- synthesisr::review_duplicates(it1_dedup$title, fuzzy_duplicates) # Perform a manual check. 
-length(fuzzy_manual$title) # 149 duplicate combinations.
-fuzzy_manual # 8, 66, 67, 102, 228, 253, 451, 453, 601, 656, 722, 741, 823, 921, 924, 948, 1047, 1047, 1055,
-# 1171, 1463, 1465, 1540, 1786, 1791, 1868, 1919, 2282, 2304, 2553, 2788, 2803, 2911, 3007, 3760 are not 
-# duplicate combinations, remaining combinations are. 
+length(fuzzy_manual$title) # 626 duplicate combinations.
+fuzzy_manual$title[1:626] # 86, 86, 86, 106, 108, 159, 171, 197, 197, 197, 197, 199, 237, 262, 273, 273, 273, 
+# 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273,
+# 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 312, 319, 361, 513, 
+# 629, 629, 629, 629, 643, 665, 857, 874, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 
+# 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 
+# 970, 970, 970, 970, 970, 970, 1138, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+# 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+# 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+# 1189, 1189, 1189, 1189, 1189, 1245, 1246, 1247, 1248, 1249, 1250, 1254, 1287, 1573, 1596, 1629, 1652, 1682, 
+# 1705, 1752, 1752, 1752, 1800, 1813, 1813, 1813, 2002, 2002, 2002, 2002, 2002, 2002, 2066, 2068, 2081, 2640,
+# 2640, 2640, 2753, 2762, 2781, 2802, 2883, 3064, 3064, 3092, 3092, 3092, 3092, 3135, 3189, 3217, 3248, 3285, 
+# 3335, 3408, 3632, 3755, 3755, 3755, 3790, 3802, 3866, 3866, 3898, 3902, 3903, 3903, 3903, 3930, 3930, 4029, 
+# 4089, 4213, 4244, 4269, 4439, 4546, 4623, 4635, 4720, 4725, 4771, 4816, 4829, 4844, 4915, 5042, 5165, 5180, 
+# 5180, 5180, 5180, 5193, 5332, 5351, 5408, 5408, 5570, 5570, 5570, 5583, 5601, 5601, 5769, 5785, 5886, 5886, 
+# 5936, 5936, 5944, 5944, 5944, 5944, 6093, 6114, 6327, 6495, 6601, 6607, 6607, 6633, 6692, 6994, 7044, 7044,
+# 7044, 7115, 7275, 7581, 7772, 8001, 8256, 8264, 8331, 8430, 8480, 8581, 8818, 8820, 8891, 9283, 9283, 9283,
+# 9456, 10049, 10108, 10271, 10433, 10433, 10876, 11027, 12253, 12253, 12254, 12254, 12254, 12254, 12254, 
+# 12254, 12254, 12269, 13224, 13662, 13662, 14376, 14376, 14490, 14642, 14680, 14873, 14937, 17935, 17935, 
+# 18784, 22394, 23257, are not duplicate combinations, remaining combinations are. 
 fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
-                                                    c( 8, 66, 67, 102, 228, 253, 451, 453, 601, 656, 722, 
-                                                       741, 823, 921, 924, 948, 1047, 1047, 1055, 1171, 1463, 
-                                                       1465, 1540, 1786, 1791, 1868, 1919, 2282, 2304, 2553, 
-                                                       2788, 2803, 2911, 3007, 3760)) 
-sum(table(fuzzy_duplicates) - 1) # Seven documents should be removed.
+                                                    c(86, 86, 86, 106, 108, 159, 171, 197, 197, 197, 197, 
+                                                      199, 237, 262, 273, 273, 273, 273, 273, 273, 273, 273, 
+                                                      273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 
+                                                      273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 
+                                                      273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 273, 
+                                                      312, 319, 361, 513, 629, 629, 629, 629, 643, 665, 857, 
+                                                      874, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 
+                                                      970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 
+                                                      970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 970, 
+                                                      970, 970, 970, 970, 970, 970, 970, 970, 1138, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 1189, 
+                                                      1189, 1189, 1189, 1189, 1189, 1189, 1189, 1245, 1246, 
+                                                      1247, 1248, 1249, 1250, 1254, 1287, 1573, 1596, 1629, 
+                                                      1652, 1682, 1705, 1752, 1752, 1752, 1800, 1813, 1813, 
+                                                      1813, 2002, 2002, 2002, 2002, 2002, 2002, 2066, 2068, 
+                                                      2081, 2640, 2640, 2640, 2753, 2762, 2781, 2802, 2883, 
+                                                      3064, 3064, 3092, 3092, 3092, 3092, 3135, 3189, 3217, 
+                                                      3248, 3285, 3335, 3408, 3632, 3755, 3755, 3755, 3790, 
+                                                      3802, 3866, 3866, 3898, 3902, 3903, 3903, 3903, 3930, 
+                                                      3930, 4029, 4089, 4213, 4244, 4269, 4439, 4546, 4623, 
+                                                      4635, 4720, 4725, 4771, 4816, 4829, 4844, 4915, 5042, 
+                                                      5165, 5180, 5180, 5180, 5180, 5193, 5332, 5351, 5408, 
+                                                      5408, 5570, 5570, 5570, 5583, 5601, 5601, 5769, 5785, 
+                                                      5886, 5886, 5936, 5936, 5944, 5944, 5944, 5944, 6093, 
+                                                      6114, 6327, 6495, 6601, 6607, 6607, 6633, 6692, 6994, 
+                                                      7044, 7044, 7044, 7115, 7275, 7581, 7772, 8001, 8256, 
+                                                      8264, 8331, 8430, 8480, 8581, 8818, 8820, 8891, 9283, 
+                                                      9283, 9283, 9456, 10049, 10108, 10271, 10433, 10433, 
+                                                      10876, 11027, 12253, 12253, 12254, 12254, 12254, 12254, 
+                                                      12254, 12254, 12254, 12269, 13224, 13662, 13662, 14376, 
+                                                      14376, 14490, 14642, 14680, 14873, 14937, 17935, 17935, 
+                                                      18784, 22394, 23257)) 
+sum(table(fuzzy_duplicates) - 1) # 74 documents should be removed.
 it1_dedup <- extract_unique_references(it1_dedup, fuzzy_duplicates) # Extract unique references. 
-length(it1_dedup$title) # De-duplicated output is 5,610. Seven documents removed. 
+length(it1_dedup$title) # De-duplicated output is 25,261. 74 documents removed. 
 ## Save .ris file of the merged file. 
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group Contact/3. Iteration 1/2. Merged")
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1/2. Merged")
 write_refs(it1_dedup, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_refman")
-# EndNote and Zotero indicate that 24 duplicates remain in the .ris file, which are removed. We furthermore 
-# remove three retracted papers that are flagged in EndNote and Zotero: "Interprofessional learning in acute 
-# care: Developing a theoretical framework", "The Evolution of Intergroup Bias: Perceptions and Attitudes in 
-# Rhesus Macaques", and "Bridging the Gap on Facebook: Assessing Intergroup Contact and Its Effects for 
-# Intergroup Relations". The second paper had three records, because two retraction statements were included,
-# where the final paper had four, because it was a duplicate, each of which had a retraction statement. The 
-# result is exported from Zotero in the file "it1_dedup.ris" which is subsequently imported.  
+# EndNote and Zotero indicate that 91 duplicates remain in the .ris file, which are removed. We furthermore 
+# remove three retracted papers that are flagged in EndNote and Zotero: "When contact changes minds: An 
+# experiment on transmission of support for gay equality" (2), "Racist biases in legal decisions are reduced 
+# by a justice focus" (1), "The Evolution of Intergroup Bias: Perceptions and Attitudes in Rhesus Macaques" 
+# (3), "Stereotype Disconfirmation Affect: When Sweet Hooligans Make You Happy and Honest Salesmen Make You 
+# Sad" (3), "Bridging the Gap on Facebook: Assessing Intergroup Contact and Its Effects for Intergroup 
+# Relations" (3), and ""Tightening the shackles": The continued invisibility of Liverpool's British African 
+# Caribbean teachers" (2).  
+# The result is exported from Zotero in the file "it1_dedup.ris" which is subsequently imported.  
 it1_dedup <- read_bibliography("it1_dedup.ris")
-length(it1_dedup$title) # 5,578 documents. Seven documents removed. 
+length(it1_dedup$title) # 25,156 documents. 105 documents removed. 
 
 ### Merged corpus precision diagnostic. For convenience I assume that similarity scores > 0.5 are a match, 
 ## and those =< 0.5 are not.
 ## Gold standard precision check.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it1_dedup$title)[, 3]), 0)) # 3 of 6 gold standard 
-# articles are retrieved.
+check_recall(gs_socialization$title, it1_dedup$title) # 4 of 5 gold standard articles are retrieved.
 ## External precision check.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup$title)[, 3]), 0)) # 47 of 98 external 
-# articles are retrieved.
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup$title)[, 3]), 0)) # 27 of 39 or 69.23% 
+# of external articles are retrieved. +3 increase relative to naive search.
 
 ### Evaluate first iteration search relative to naive search. 
 
 ## Here I do not use the "check_recall" function because it takes a long time, and it is not exact / 
 ## conservative enough, for the purpose of merging the naive search documents that are not in the first 
 ## iteration search. I do this to try and maximize coverage. 
-length(naive_dedup$title) # 2,043 documents.
-length(it1_dedup$title) # 5,578 documents. 
-overlap_naive_it1 <- bind_rows(naive_dedup, it1_dedup) # Merge corpora. Should be 2,043 + 5,578 = 7,621 
+length(naive_dedup$title) # 13,305 documents.
+length(it1_dedup$title) # 25,156 documents. 
+overlap_naive_it1 <- bind_rows(naive_dedup, it1_dedup) # Merge corpora. 
 ## Exact matching.
-length(overlap_naive_it1$title) # Input is 7,621 documents.
+length(overlap_naive_it1$title) # Input is 38,461 documents.
 exact_duplicates <- synthesisr::find_duplicates(
   overlap_naive_it1$title, # Raw import as input;
   method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
@@ -1236,11 +1312,10 @@ exact_duplicates <- synthesisr::find_duplicates(
   rm_punctuation = TRUE) # remove punctuation from input   
 exact_manual <- synthesisr::review_duplicates(overlap_naive_it1$title, exact_duplicates) # Perform a manual
 # check.
-length(exact_manual$title) # Sum of 2,368 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates) - 1)) # 1,184 documents should be removed.
+length(exact_manual$title) # Sum of 14,184 duplicate combinations identified.
+sum(as.numeric(table(exact_duplicates) - 1)) # 7,092 documents should be removed.
 it1_dedup_out <- synthesisr::extract_unique_references(overlap_naive_it1, exact_duplicates) 
-length(it1_dedup_out$title) # Output after exact matching is 6,437. 1,184 documents removed. 859 documents 
-# from the naive search not in the first iterations search remain.
+length(it1_dedup_out$title) # Output after exact matching is 31,369. 7,092 documents removed. 
 ## Fuzzy matching five.
 fuzzy_duplicates <- find_duplicates(
   it1_dedup_out$title, # Exact match documents as input;
@@ -1248,11 +1323,15 @@ fuzzy_duplicates <- find_duplicates(
   to_lower = TRUE, # convert input to lower case;
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default cutoff. 
-(fuzzy_manual <- review_duplicates(it1_dedup_out$title, fuzzy_duplicates)) # Perform a manual check. All 
-# combinations are duplicates.
-sum(table(fuzzy_duplicates) - 1) # 22 documents should be removed.
+(fuzzy_manual <- review_duplicates(it1_dedup_out$title, fuzzy_duplicates)) # Perform a manual check. 3036, 
+# 3036, 3036, 3036, 13205, 13250, 13250, 13260, 13291, 18373, 29921, 31148, 31148, are not duplicate 
+# combinations. Remaining ones are. 
+fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
+                                                    c(3036, 3036, 3036, 3036, 13205, 13250, 13250, 13260, 
+                                                      13291, 18373, 29921, 31148, 31148))
+sum(table(fuzzy_duplicates) - 1) # 64 documents should be removed.
 it1_dedup_out <- extract_unique_references(it1_dedup_out, fuzzy_duplicates) # Extract unique references.
-length(it1_dedup_out$title) # De-duplicated output is 6,415. 22 documents were removed. 837 documents remain.
+length(it1_dedup_out$title) # De-duplicated output is 31,305. 64 documents were removed.
 ## Fuzzy matching ten.
 fuzzy_duplicates <- find_duplicates(
   it1_dedup_out$title, # Fuzzy matching five as input;
@@ -1260,794 +1339,79 @@ fuzzy_duplicates <- find_duplicates(
   to_lower = TRUE, # convert input to lower case;
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 10) # default cutoff. 
-(fuzzy_manual <- review_duplicates(it1_dedup_out$title, fuzzy_duplicates)) # Perform a manual check. One 
-# duplicate combination identified. 
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(462, 2093, 2123, 3430, 3802, 4196))
-sum(table(fuzzy_duplicates) - 1) # One document should be removed.
+(fuzzy_manual <- review_duplicates(it1_dedup_out$title, fuzzy_duplicates)) # Perform a manual check. 40, 124,
+# 124, 124, 124, 451, 451, 451, 451, 451, 451, 451, 451, 451, 453, 1007, 1525, 1618, 1844, 1878, 1883, 2125, 
+# 2516, 2887, 2959, 3036, 3036, 3036, 3036, 3036, 3036, 3036, 3036, 3118, 5653, 5788, 7119, 7354, 12839, 
+# 13202, 13202, 13203, 13203, 13203, 13203, 13203, 13203, 13204, 13204, 13204, 13204, 13204, 13204, 13204, 
+# 13204, 13204, 13204, 13204, 13205, 13207, 13209, 13209, 13210, 13210, 13210, 13210, 13210, 13210, 13210, 
+# 13210, 13211, 13213, 13214, 13214, 13215, 13222, 13222, 13226, 13226, 13226, 13226, 13226, 13226, 13226, 
+# 13226, 13226, 13228, 13228, 13248, 13259, 13268, 13273, 13457, 13515, 14454, 15457, 15478, 15572, 16450, 
+# 16579, 16589, 16745, 17159, 17159, 17279, 17293, 18508, 19205, 19608, 19610, 29220, 29888, 31017, 31018, 
+# 31042, 31050, 31051, 31052, 31097, 31120, 31120, are not duplicate combinations, remaining ones are. 
+fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
+                                                    c(40, 124, 124, 124, 124, 451, 451, 451, 451, 451, 451, 
+                                                      451, 451, 451, 453, 1007, 1525, 1618, 1844, 1878, 1883, 
+                                                      2125, 2516, 2887, 2959, 3036, 3036, 3036, 3036, 3036, 
+                                                      3036, 3036, 3036, 3118, 5653, 5788, 7119, 7354, 12839, 
+                                                      13202, 13202, 13203, 13203, 13203, 13203, 13203, 13203, 
+                                                      13204, 13204, 13204, 13204, 13204, 13204, 13204, 13204, 
+                                                      13204, 13204, 13204, 13205, 13207, 13209, 13209, 13210, 
+                                                      13210, 13210, 13210, 13210, 13210, 13210, 13210, 13211, 
+                                                      13213, 13214, 13214, 13215, 13222, 13222, 13226, 13226, 
+                                                      13226, 13226, 13226, 13226, 13226, 13226, 13226, 13228, 
+                                                      13228, 13248, 13259, 13268, 13273, 13457, 13515, 14454, 
+                                                      15457, 15478, 15572, 16450, 16579, 16589, 16745, 17159, 
+                                                      17159, 17279, 17293, 18508, 19205, 19608, 19610, 29220, 
+                                                      29888, 31017, 31018, 31042, 31050, 31051, 31052, 31097, 
+                                                      31120, 31120))
+sum(table(fuzzy_duplicates) - 1) # Two documents should be removed.
 it1_dedup_out <- extract_unique_references(it1_dedup_out, fuzzy_duplicates) # Extract unique references.
-length(it1_dedup_out$title) # De-duplicated output is 6,414. One document was removed. 836 documents remain.
+length(it1_dedup_out$title) # De-duplicated output is 31,303. TWo documents were removed. 
 ## Save .ris file. 
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1")
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. Iteration 1")
 write_refs(it1_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
 # as .ris. 
 write_refs(it1_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
 # as .bib for Zotero. 
-# EndNote and Zotero indicate that two duplicates remain in the .ris file, which are removed. In addition, 
-# one more retraction was identified: "Ethnic threat and social control: Examining public support for 
-# judicial use of ethnicity in punishment", consisting of two documents, which was removed. The result is 
-# exported from Zotero in the file "it1_dedup_out.ris" which is subsequently imported.  
+# EndNote and Zotero indicate that six duplicates remain in the .ris file, which are removed. In addition, 
+# four more retractions were identified: "Helping the ingroup versus harming the outgroup: Evidence from 
+# morality-based groups" (2), "Structural stigma and all-cause mortality in sexual minority populations" (2), 
+# "Ethnic threat and social control: Examining public support for judicial use of ethnicity in punishment" 
+# (2), and "Coping with chaos: How disordered contexts promote stereotyping and discrimination" (1). The 
+# result is exported from Zotero in the file "it1_dedup_out.ris" which is subsequently imported.  
 it1_dedup_out <- read_bibliography("it1_dedup_out.ris")
-length(it1_dedup_out$title) # 6,410 documents. Four documents removed. This is the final corpus file of the 
+length(it1_dedup_out$title) # 31,289 documents. 13 documents removed. This is the final corpus file of the 
 # first iteration search.
 
 ### Merged corpus precision diagnostic. For convenience I assume that similarity scores > 0.5 are a match, 
 ## and those =< 0.5 are not.
 ## Gold standard precision check.
-check_recall(gs_group_contact$title, it1_dedup_out$title) # 6 of 6 gold gold standard articles are retrieved.
+check_recall(gs_socialization$title, it1_dedup_out$title) # 5 of 5 gold gold standard articles are retrieved.
 ## External precision check.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it1_dedup_out$title)[, 3]), 0)) # 61 of 98 external 
-# articles are retrieved.
+sum(round(as.numeric(check_recall(ex_socialization$title, it1_dedup_out$title)[, 3]), 0)) # 27 of 39 external 
+# articles or 69,23% are retrieved.
 
 ## Inspect coverage gain relative to the naive search. I define coverage as the sum of the additional 
 ## documents that were found relative to the previous search iteration, and the documents from the previous 
 ## search iteration that were not identified in the current one. 
-length(naive_dedup$title) # 2,043 articles.
-length(it1_dedup$title) # 5,578 articles.
-(length(it1_dedup$title) - length(naive_dedup$title)) # 5,578 - 2,043 = 3,535 more documents identified. 
-(length(it1_dedup_out$title) - length(it1_dedup$title)) # ~832 documents from the naive search not in the 
+length(naive_dedup$title) # 13,305 articles.
+length(it1_dedup$title) # 25,156 articles.
+(length(it1_dedup$title) - length(naive_dedup$title)) # 11,851 more documents identified. 
+(length(it1_dedup_out$title) - length(it1_dedup$title)) # 6,133 documents from the naive search not in the 
 # first iteration search. 
-# So total coverage increase is: 3,535 + 832 = 4,367 documents or 4,367 / 2,043 = 2.14 as a factor increase. 
-(1 - (length(it1_dedup_out$title) - length(it1_dedup$title)) / length(naive_dedup$title)) * 100 # 59.28% of 
+# So total coverage increase is: 11,851 + 6,133 = 17,984 documents or 17,984 / 13,309 = 1,35 as a factor 
+# increase. 
+(1 - (length(it1_dedup_out$title) - length(it1_dedup$title)) / length(naive_dedup$title)) * 100 # 53.90% of 
 # the naive search was in the first iteration search. 
 
-## Since the overlap with the previous iteration is only moderate and the coverage increase differential is 
-## large, we continue with a second iteration.
-
-#########################################
-##### Iteration 2 Literature Search #####
-#########################################
-
-### Now repeat the previous procedure, but with keywords extracted from the first iteration search corpus.  
-
-### Clear the environment except for the gold standard search terms, the validation article sets, and 
-### the "naive_dedup", and "it1_dedup_out" objects. 
-rm(list = setdiff(ls(), c("gs_grouped_terms", "gs_group_contact", "ex_group_contact", "naive_dedup", 
-                          "it1_dedup_out")))
-
-### Start by checking how many documents in the first iteration search corpus provide keywords, titles, and 
-### abstracts.
-## Keywords.
-length(it1_dedup_out$keywords) # Total number of documents is 6,410. 
-length(it1_dedup_out$keywords) - sum(is.na(it1_dedup_out$keywords)) # All of the articles list keywords.  
-## Titles and abstracts.
-length(it1_dedup_out$title) - sum(is.na(it1_dedup_out$title)) # All of the articles list a title.  
-length(it1_dedup_out$abstract) - sum(is.na(it1_dedup_out$abstract)) # All of the articles list an abstract.  
-
-### The first step is to obtain the keywords listed in the articles. We extract all non-single keywords that 
-### are listed a minimum of forty times. Note that the forty number is arbitrary insofar that we need to 
-### strike a balance between retrieving enough but not too many keyword candidates. More specifically,
-### Gusenbauer & Haddaway (2020) note that search terms of length twenty-five should allow reviewers to 
-### specify theirsearch scope to a reasonable extent. Put differently, our Boolean search should contain at 
-### least twenty-five search terms. On the other hand, the maximum search string length that Ovid, Scopus, 
-### and Web of Science allow according to Gusenbauer & Haddaway (2020) is around 1000. Web of Science for 
-### example states that the maximum number of terms allowed in one field is fifty terms when using 
-### "All Fields". As such, this number of keywords is a natural cap to the number of keywords that we can 
-### seek to obtain from a corpora set. To reiterate, the number of keywords that will be incorporated in the 
-### final searches will have a lower limit of 25 search terms, and an upper limit of 1000 characters in the 
-### search string length, which translates to around fifty to sixty search terms (depending on the length of 
-### the search terms).
-tagged_keywords <- litsearchr::extract_terms(
-  keywords = it1_dedup_out$keywords, # This is a list with the keywords from the articles. 
-  method = "tagged", # Indicate that we want to obtain the keywords from the provided list.
-  min_freq = 40, # The keyword has to occur a minimum of forty times to be included.   
-  ngrams = TRUE, # 'litsearchr' should only consider an ngram with a minimum of length n, 
-  min_n = 2, # where n is equal to 2.
-  language = "English") # 'litsearchr' should only consider English keywords.
-length(tagged_keywords) # 180 tagged keywords.
-### Now use the RAKE to obtain keywords from the titles and abstracts of the search corpus. We extract all 
-### non-single keywords that occur at least forty times in these titles and abstracts. 
-raked_keywords <- litsearchr::extract_terms(
-  text = paste(it1_dedup_out$title, it1_dedup_out$abstract), # This is a list of titles and abstracts.
-  method = "fakerake", # Indicate that 'litsearchr' should use the RAKE algorithm.
-  min_freq = 40, # The keyword has to occur a minimum of forty times to be included.
-  ngrams = TRUE, # 'litsearchr' should only consider an ngram with a minimum of length n, 
-  min_n = 2, # where n is equal to 2.
-  language = "English") # 'litsearchr' should only consider English keywords.
-length(raked_keywords) # 317 raked keywords.
-## Sum total of tagged and raked keywords is 180 + 317 = 497. 
-keyword_candidates <- remove_redundancies(c(tagged_keywords, raked_keywords), closure = "full") # Remove
-# duplicate terms.
-length(keyword_candidates) # Total of 421 keyword candidates. 
-## The subsequent task is to select all keywords that are relevant to our query from the candidate pool. I 
-## select terms that relate in content to the relevant literature, i.e., are a independent or dependent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship. Note that I interpret 
-## relevance quite broadly, since these terms will be will be ranked and filtered further based on their 
-## "connectedness" in a co-occurrence network. In that sense, it is better too be too liberal than too 
-## selective in our choices here, since it might be hard to anticipate which relevant terms are important 
-## from this "connectedness" perspective. I furthermore do not include keywords which relate directly to any 
-## of the other paradigms, e.g., I do not include keywords on group threat theory even though these might 
-## appear often in the group contact literature. Finally note that I do this part manually, which is prone to 
-## errors. 
-all_keywords <- keyword_candidates[
-  c(2, 3, 13, 15, 17, 18, 22, 27, 29, 32, 35, 36, 37, 38, 39, 41, 44, 45, 46, 47, 48, 49, 50, 62, 64, 65, 69,
-    70, 72, 73, 74, 75, 78, 79, 83, 94, 95, 96, 101, 102, 105, 109, 111, 116, 118, 120, 121, 122, 124, 126,
-    127, 134, 135, 137, 142, 144, 147, 149, 150, 151, 152, 153, 154, 161, 164, 167, 168, 173, 188, 201, 202, 
-    215, 216, 218, 222, 223, 224, 225, 226, 227, 228, 235, 250, 251, 256, 259, 260, 264, 266, 267, 269, 270,
-    271, 275, 276, 277, 278, 281, 282, 283, 284, 285, 288, 289, 290, 292, 293, 297, 308, 309, 310, 311, 318,
-    320, 323, 324, 325, 329, 330, 331, 336, 351, 353, 354, 359, 360, 361, 382, 387, 388) 
-]
-## Manual cleaning. 
-all_keywords <- all_keywords[-c(1)] # Remove "0410 group interactions".
-all_keywords[1] <- "group interactions" # Re-format.
-(all_keywords <- sort(all_keywords))
-length(all_keywords) # 129 keyword candidates. 
-
-### We further filter the keyword set by ranking the relative strength of each keyword in a so-called keyword 
-### co-occurrence network (KCN). In a KCN, each keyword is "represented as a node and each co-occurrence of 
-### a pair of words is represented as a link" (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). "The number 
-### of times that a pair of words co-occurs in multiple articles constitutes the weight of the link 
-### connecting the pair" (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). "The network constructed in this 
-### manner represents cumulative knowledge of a domain and helps to uncover meaningful knowledge components 
-### and insights based on the patterns and strength of links between keywords that appear in the literature" 
-### (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). I furthermore combine the second iteration keywords 
-## with the naive keywords. I add the naive keywords to the keyword candidate selection under the assumption 
-## that these are important keywords because they were obtained from the gold standard articles, and should 
-## therefore be considered explicitly in the KCN analysis, even though they are implicitly represented.
-all_keywords_final <- c()
-all_keywords_final <- append(all_keywords_final, c(as.vector(unlist(gs_grouped_terms)), all_keywords))
-all_keywords_final <- remove_redundancies(all_keywords_final, closure = "full") # Remove duplicates. 
-length(all_keywords_final) # 141 candidates.
-## Build the keyword co-occurrence network. This chunk of code is a reworked version of the tutorial at: 
-## https://luketudge.github.io/litsearchr-tutorial/litsearchr_tutorial.html.
-filter_dfm <- litsearchr::create_dfm(
-  elements = paste(it1_dedup_out$title, it1_dedup_out$abstract), # The input in which the keywords can 
-  # co-occur, titles and abstracts. 
-  features = all_keywords_final) # The keyword candidates. 
-kcn <- create_network(filter_dfm) # Create a KCN.
-## Rank keywords based on strength in the co-occurrence network.
-strengths <- strength(kcn) # Calculate strength values. 
-data.frame(term = names(strengths), strength = strengths, row.names = NULL) %>%
-  mutate(rank = rank(strength, ties.method = "min")) %>%
-  arrange(desc(strength)) ->
-  term_strengths # Create a data frame where the keywords are sorted by strength, in descending order. 
-## I now apply a filter to select  and  terms for the search string in OVID, Scopus, and Web of Science 
-## and ProQuest, respectively, where I remove terms which refer to an equivalent or near equivalent concept, 
-## i.e., "target group" and "target groups", where I select the term with the highest strength value. 
-(term_strengths <- cbind(seq(length(term_strengths$term)), term_strengths[order(term_strengths$term), ]))
-term_strengths <- term_strengths[-c(2, 3, 13, 17, 18, 22, 24, 27, 29, 32, 36, 39, 43, 48, 49, 54, 61, 65, 68, 
-                                    73, 74, 76, 78, 79, 82, 84, 85, 88, 93, 96, 99, 102, 110, 111, 112, 122, 
-                                    123, 125), ]
-
-### Construct Boolean search OVID, Web of Science, and Scopus.
-## Select first 60 terms from filtered term set. 
-keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
-][1:60, ]$term)
-(keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-sink("second_iteration_selected_terms_ovid_scopus_wos.txt")
-print(keywords_ovid_scopus_wos)
-sink() 
-## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or independent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship.
-grouped_terms_ovid_scopus_wos <- list(
-  determinant = keywords_ovid_scopus_wos[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
-                                           20, 21, 22, 23, 25, 26, 28, 29, 30, 31, 34, 35, 36, 38, 40, 41, 
-                                           43, 51, 54, 55, 57, 58, 59, 60)],
-  outcome = keywords_ovid_scopus_wos[c(24, 28, 32, 33, 37, 39, 42, 44, 45, 46, 47, 48, 49, 50, 52, 53, 56)])
-grouped_terms_ovid_scopus_wos
-### Given the grouped terms, write the Boolean search for OVID, Web of Science, and Scopus to the directory
-### and print it to the console.  
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2") # Set directory.
-write_search(
-  grouped_terms_ovid_scopus_wos, # The list of determinant and outcome keywords identified in the naive 
-  # document set.
-  languages = "English", # Language to write the search in, here set to English.
-  exactphrase = TRUE, # Whether terms that consist of more than one word should be matched exactly rather 
-  # than as two separate words. Set to TRUE, to limit both the scope and the number of redundant documents.
-  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch all 
-  # variants of the word. Set to TRUE.
-  closure = "none", # Whether partial matches are matched at the left end of a word ("left"), at the right 
-  # ("right"), only as exact matches ("full"), or as any word containing a term ("none").  Set to "none" to 
-  # obtain as many documents as possible.  
-  writesearch = TRUE) # Whether we would like to write the search text to a file in the current directory. 
-# Set to TRUE.
-bool <- capture.output(cat(read_file("search-inEnglish.txt"))) 
-bool <- gsub('\\', "", bool, fixed = TRUE)
-## Write the Boolean search for Ovid. 
-bool <- gsub("((", "(", bool, fixed = T)
-bool <- gsub("))", ")", bool, fixed = T)
-cat(bool)
-writeLines(bool, "bool_ovid_it2.txt")
-## Write the Boolean search for Scopus. 
-writeLines(bool, "bool_scopus_it2.txt")
-## Write the Boolean search for Web of Science. 
-bool <- capture.output(cat(read_file("search-inEnglish.txt"))) 
-bool <- paste0('ALL = ', bool, 'AND PY = (2010-2022)')
-writeLines(bool, "bool_wos_it2.txt")
-file.remove("search-inEnglish.txt") # Remove source file. 
-## Finally save the grouped terms to a text file in the working directory. I do this to keep the search 
-## reproducible in case some previous chunk of code does not replicate for any particular reason.
-sink("second_iteration_search_terms_ovid_scopus_wos.txt")
-print(grouped_terms_ovid_scopus_wos)
-sink() 
-
-### Construct Boolean search ProQuest.
-## Select first 36 terms from filtered term set.
-keywords_proquest <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
-][1:36, ]$term)
-(keywords_proquest <- keywords_proquest[order(keywords_proquest)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-sink("second_iteration_selected_terms_proquest.txt")
-print(keywords_proquest)
-sink() 
-## Categorize "keywords_proquest" object based on keyword being a potential dependent or independent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship.
-grouped_terms_proquest <- list(
-  determinant = keywords_proquest[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 20, 21, 22, 
-                                    24, 26, 28, 32, 34, 35, 36)],
-  outcome = keywords_proquest[c(15, 19, 23, 25, 27, 29, 30, 31, 33)])
-grouped_terms_proquest$outcome <- grouped_terms_proquest$outcome[c(-2)] # Remove "intergroup relations" 
-# because it blows ups the search in ProQuest.
-### Given the grouped terms, write the the Boolean search for ProQuest to the directory and print it to the 
-### console.  
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2") # Set directory.
-write_search(
-  grouped_terms_proquest, # The list of determinant and outcome keywords identified in the naive document 
-  # set.
-  languages = "English", # Language to write the search in, here set to English.
-  exactphrase = TRUE, # Whether terms that consist of more than one word should be matched exactly rather 
-  # than as two separate words. Set to TRUE, to limit both the scope and the number of redundant documents.
-  stemming = TRUE, # Whether words are stripped down to the smallest meaningful part of the word to catch all 
-  # variants of the word. Set to TRUE.
-  closure = "none", # Whether partial matches are matched at the left end of a word ("left"), at the right 
-  # ("right"), only as exact matches ("full"), or as any word containing a term ("none").  Set to "none" to 
-  # obtain as many documents as possible.  
-  writesearch = TRUE) # Whether we would like to write the search text to a file in the current directory. 
-# Set to TRUE.
-bool <- capture.output(cat(read_file("search-inEnglish.txt"))) 
-bool <- gsub('\\', "", bool, fixed = TRUE)
-## Write the Boolean search for ProQuest. 
-bool <- gsub("((", "(", bool, fixed = T)
-bool <- gsub("))", ")", bool, fixed = T)
-cat(bool)
-writeLines(bool, "bool_proquest_it2.txt")
-file.remove("search-inEnglish.txt") # Remove source file. 
-## Finally save the grouped terms to a text file in the working directory. I do this to keep the search 
-## reproducible in case some previous chunk of code does not replicate for any particular reason.
-sink("second_iteration_search_terms_proquest.txt")
-print(grouped_terms_proquest)
-sink() 
-
-### Please refer to the naive iteration for an overview of the exact steps of the search procedure.
-
-### All searches were conducted on 27-07-2022, except for the search in Ovid, which was re-done on 01-08-2022
-### due to the presence of later identified NA values. This resulted in 5,645 documents from Ovid (Selection: 
-### PsycINFO), 2,635 documents from Proquest (Selection: Sociological Abstracts), 8,499 documents from Scopus 
-### (Selection: Full index), and 9,206 documents from Web of Science (Selection: Web of Science Core 
-### Collection), for a total of 25,985 documents. Please note that this document set is unfiltered, i.e., 
-### duplicates, retracted documents, unidentified non-English documents, etc., have not yet been removed. In 
-### Ovid, the documents were manually extracted in three batches. In ProQuest the documents were manually 
-### extracted in 100-sized batches. In Scopus, the documents were manually extracted in 2000 document sized 
-### batches, stratified by publication year. In Web of Science, the documents were manually extracted in 1000 
-### document sized batches. 
-
-### Data import and cleaning.
-## Import results of informed search. Note that the batches for each search system were merged in EndNote.
-## Start by checking whether the imported length is equal to the length of the raw .ris files.
-import_ovid_it2 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iterat", 
-                     "ion 2/1. Unmerged/Ovid"),
-  verbose = TRUE)
-import_proquest_it2 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iterat", 
-                     "ion 2/1. Unmerged/ProQuest"),
-  verbose = TRUE)
-import_scopus_it2 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iterat", 
-                     "ion 2/1. Unmerged/Scopus"),
-  verbose = TRUE)
-import_wos_it2 <- import_results(
-  directory = paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iterat", 
-                     "ion 2/1. Unmerged/Web of Science"),
-  verbose = TRUE)
-length(import_ovid_it2$title) # 5,645, which is correct.  
-length(import_proquest_it2$title) # 2,635, which is correct. 
-length(import_scopus_it2$title) # 8,499, which is correct.  
-length(import_wos_it2$title) # 9,206, which is correct.  
-
-## We subsequently identify and remove identifiable, non-English documents, if necessary. We then save the 
-## resulting file.
-# Ovid.
-table(import_ovid_it2$language) # Ovid. All documents in the .ris file are in English
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Me", 
-             "rged/Ovid/1. Raw"))
-write_refs(import_ovid_it2, format = "ris", tag_naming = "synthesisr", file = "ovid_r")
-# ProQuest.
-table(import_proquest_it2$language) # ProQuest. All documents in the .ris file are in English. 
-import_proquest_it2 <- import_proquest_it2[import_proquest_it2$language == "English" ,] # Select English 
-# documents and store them. 3,632 documents in ProQuest document set.
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Me", 
-             "rged/ProQuest/1. Raw"))
-write_refs(import_proquest_it2, format = "ris", tag_naming = "synthesisr", file = "proquest_r")
-# Scopus.
-table(import_scopus_it2$language) # Scopus. All documents in the .ris file are in English.
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Me", 
-             "rged/Scopus/1. Raw"))
-write_refs(import_scopus_it2, format = "ris", tag_naming = "synthesisr", file = "scopus_r")
-# Web of Science.
-table(import_wos_it2$language) # Web of Science. All documents in the .ris file are in English. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Me", 
-             "rged/Web of Science/1. Raw"))
-write_refs(import_wos_it2, format = "ris", tag_naming = "synthesisr", file = "web_of_science_r")
-
-### De-duplication. Please refer to the naive iteration for an overview of the exact steps of the 
-### de-deplication procedure.
-
-### Ovid.
-## Exact matching.
-length(import_ovid_it2$title) # Input is 5,645  documents.
-exact_duplicates_ovid <- synthesisr::find_duplicates(
-  import_ovid_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-exact_manual <- synthesisr::review_duplicates(import_ovid_it2$title, exact_duplicates_ovid) # Perform a 
-# manual check. 
-length(exact_manual$title) # 14 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates_ovid) - 1)) # 8 documents should be removed.
-it2_dedup_ovid <- synthesisr::extract_unique_references(import_ovid_it2, exact_duplicates_ovid) 
-length(it2_dedup_ovid$title) # Output after exact matching is 5,637. Eight documents removed.
-## Fuzzy matching five.
-fuzzy_duplicates_ovid <- find_duplicates( 
-  it2_dedup_ovid$title, # Exact matching output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default threshold of five. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_ovid$title, fuzzy_duplicates_ovid)) # Perform a 
-# manual check. TWo duplicate combinations identified.
-sum(table(fuzzy_duplicates_ovid) - 1) # Three documents should be removed.
-it2_dedup_ovid <- extract_unique_references(it2_dedup_ovid, fuzzy_duplicates_ovid) # Extract unique 
-# references. 
-length(it2_dedup_ovid$title) # De-duplicated output is 5,634. Three documents removed. 
-## Fuzzy matching ten.
-fuzzy_duplicates_ovid <- find_duplicates( 
-  it2_dedup_ovid$title, # Fuzzy matching five output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 10) # increased threshold of ten. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_ovid$title, fuzzy_duplicates_ovid)) # Perform a 
-# manual check. No duplicate combinations identified.
-## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Mer", 
-             "ged/Ovid/2. Deduplicated"))
-write_refs(it2_dedup_ovid, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_ovid")
-
-### ProQuest. 
-## Exact matching.
-length(import_proquest_it2$title) # Input is 2,632 documents.
-exact_duplicates_proquest <- synthesisr::find_duplicates(
-  import_proquest_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-(exact_manual <- synthesisr::review_duplicates(import_proquest_it2$title, exact_duplicates_proquest)) # All
-# combinations are duplicates.
-sum(as.numeric(table(exact_duplicates_proquest) - 1)) # 83 articles should be removed.
-it2_dedup_proquest <- extract_unique_references(import_proquest_it2, exact_duplicates_proquest) 
-length(it2_dedup_proquest$title) # Output after exact matching is 2,549. 83 documents removed.
-## Fuzzy matching five.
-fuzzy_duplicates_proquest <- find_duplicates( 
-  it2_dedup_proquest$title, # Exact matching output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default threshold of five. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_proquest$title, fuzzy_duplicates_proquest)) # 
-# Perform a manual check. All combinations are duplicates.
-sum(table(fuzzy_duplicates_proquest) - 1) # 10 documents should be removed.
-it2_dedup_proquest <- extract_unique_references(it2_dedup_proquest, fuzzy_duplicates_proquest) # 
-# Extract unique references. 
-length(it2_dedup_proquest$title) # De-duplicated output is 2,539. 10 documents removed. 
-## Fuzzy matching ten.
-fuzzy_duplicates_proquest <- find_duplicates( 
-  it2_dedup_proquest$title, # Fuzzy matching five output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 10) # increased threshold of ten. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_proquest$title, fuzzy_duplicates_proquest)) # 
-# Perform a manual check. One duplicate combination identified.
-fuzzy_duplicates_proquest <- synthesisr::override_duplicates(fuzzy_duplicates_proquest, c(135, 135, 709)) 
-# Override non-duplicates.
-sum(table(fuzzy_duplicates_proquest) - 1) # One document should be removed.
-it2_dedup_proquest <- extract_unique_references(it2_dedup_proquest, fuzzy_duplicates_proquest) # Extract 
-# unique references. 
-length(it2_dedup_proquest$title) # De-duplicated output is 2,538. Four documents removed. 
-## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Mer", 
-             "ged/ProQuest/2. Deduplicated"))
-write_refs(it2_dedup_proquest, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_proquest")
-
-### Scopus.
-## Exact matching.
-length(import_scopus_it2$title) # Input is 8,499 documents.
-exact_duplicates_scopus <- synthesisr::find_duplicates(
-  import_scopus_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-(exact_manual <- synthesisr::review_duplicates(import_scopus_it2$title, exact_duplicates_scopus)) # Perform a 
-# manual check. All combinations are duplicates.
-sum(as.numeric(table(exact_duplicates_scopus) - 1)) # Seven documents should be removed.
-it2_dedup_scopus <- synthesisr::extract_unique_references(import_scopus_it2, exact_duplicates_scopus) 
-length(it2_dedup_scopus$title) # Output after exact matching is 8,492 . Seven documents removed.
-## Fuzzy matching five.
-fuzzy_duplicates_scopus <- find_duplicates( 
-  it2_dedup_scopus$title, # Exact matching output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default threshold of five. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_scopus$title, fuzzy_duplicates_scopus)) # Perform a 
-# manual check. Two duplicate combinations identified.
-sum(table(fuzzy_duplicates_scopus) - 1) # Two documents should be removed.
-it2_dedup_scopus <- extract_unique_references(it2_dedup_scopus, fuzzy_duplicates_scopus) # Extract unique 
-# references. 
-length(it2_dedup_scopus$title) # De-duplicated output is 8,490. Two documents removed. 
-## Fuzzy matching ten.
-fuzzy_duplicates_scopus <- find_duplicates( 
-  it2_dedup_scopus$title, # Exact matching output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 10) # increased threshold of ten. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_scopus$title, fuzzy_duplicates_scopus)) # Perform a 
-# manual check. No duplicate combinations identified.
-length(it2_dedup_scopus$title) # De-duplicated output is 8,490. Zero documents removed. 
-## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Mer", 
-             "ged/Scopus/2. Deduplicated"))
-write_refs(it2_dedup_scopus, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_scopus")
-
-### Web of Science.
-length(import_wos_it2$title) # Input is 9,206 documents.
-exact_duplicates_wos <- synthesisr::find_duplicates(
-  import_wos_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-(exact_manual <- synthesisr::review_duplicates(import_wos_it2$title, exact_duplicates_wos)) # Perform a 
-# manual check. Five duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates_wos) - 1)) # Five documents should be removed.
-it2_dedup_wos <- synthesisr::extract_unique_references(import_wos_it2, exact_duplicates_wos) 
-length(it2_dedup_wos$title) # Output after exact matching is 9,201. Five documents removed.
-## Fuzzy matching five.
-fuzzy_duplicates_wos <- find_duplicates( 
-  it2_dedup_wos$title, # Exact matching output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default threshold of five. 
-(fuzzy_manual <- synthesisr::review_duplicates(it2_dedup_wos$title, fuzzy_duplicates_wos)) # Perform a 
-# manual check. No duplicate combinations identified.
-sum(table(fuzzy_duplicates_wos) - 1) # Zero documents should be removed.
-fuzzy_duplicates_wos <- synthesisr::override_duplicates(fuzzy_duplicates_wos, c(3053)) 
-it2_dedup_wos <- extract_unique_references(it2_dedup_wos, fuzzy_duplicates_wos) # Extract unique 
-# references. 
-length(it2_dedup_wos$title) # De-duplicated output is 9,201. Zero documents removed. 
-## Save output as .ris file. 
-setwd(paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Mer", 
-             "ged/Web of Science/2. Deduplicated"))
-write_refs(it2_dedup_wos, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_wos")
-
-### Investigate the distribution of the overlap in the first iteration. Please note that this is very 
-### approximate, in that I am not sure how this function matches duplicates (I assume its exact).  
-ggVennDiagram(list(it2_dedup_ovid$title, it2_dedup_proquest$title, it2_dedup_scopus$title, 
-                   it2_dedup_wos$title), 
-              category.names = c("Ovid", "ProQuest", "Scopus", "Web of Science"), label_alpha = 0.75, 
-              label = c("count"))
-## The Venn diagram seems to indicate that although there exists quite some overlap between the corpora, 
-## especially between Scopus and Web of Science, that they each add a substantial number of 
-## non-overlapping documents to the sum total.
-
-### Corpus precision diagnostics. Please refer to the naive iteration for an overview of the exact steps of 
-### the precision diagnostics.
-
-## Gold standard precision check. For convenience I assume that similarity scores > 0.5 are a match, and 
-## those =< 0.5 are not.
-## Ovid.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it2_dedup_ovid$title)[, 3]), 0)) # 2 of 6 gold 
-# standard articles are retrieved.
-## ProQuest.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it2_dedup_proquest$title)[, 3]), 0)) # 3 of 6 gold 
-## standard articles are retrieved.
-## Scopus.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it2_dedup_scopus$title)[, 3]), 0)) # 3 of 6 gold 
-# standard articles are retrieved. 
-## Web of Science.
-sum(round(as.numeric(check_recall(gs_group_contact$title, it2_dedup_wos$title)[, 3]), 0)) # 6 of 6 gold 
-# standard articles are retrieved.
-## The gold standard precision check tentatively indicates that Web of Science has the highest precision, 
-## followed by ProQuest and Scopus, and finally by Ovid. Relative to the first iteration search, the 
-## precision with respect to the external articles has increased in ProQuest (+2), Scopus (+1), and Web of 
-## Science (+3), and stayed constant in Ovid (+0). 
-
-## External precision check. For convenience I assume that similarity scores > 0.5 are a match, and 
-## those =< 0.5 are not.
-## Ovid.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it2_dedup_ovid$title)[, 3]), 0)) # 37 of 98 
-# external articles are retrieved.
-## ProQuest.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it2_dedup_proquest$title)[, 3]), 0)) # 24 of 98 
-# external articles are retrieved.
-## Scopus.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it2_dedup_scopus$title)[, 3]), 0)) # 46 of 98 
-# external articles are retrieved.
-## Web of Science.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it2_dedup_wos$title)[, 3]), 0)) # 62 of 98 
-# external articles are retrieved.
-## The external precision check tentatively indicates that Web of Science has the highest precision, 
-## followed by Scopus, Ovid, and ProQuest, respectively. Relative to the first iteration search, the 
-## precision with respect to the external articles has increased in ProQuest (+6), Scopus (+8), Ovid (+7), 
-## and Web of Science (+16). 
-
-### Remove duplicates between corpora and combine the various corpora into a .ris file.
-it2_dedup <- bind_rows(it2_dedup_ovid, it2_dedup_proquest, it2_dedup_scopus, it2_dedup_wos) # Merge corpora. 
-## Exact matching.
-length(it2_dedup$title) # Input is 25,863 documents.
-exact_duplicates <- synthesisr::find_duplicates(
-  it2_dedup$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-exact_manual <- synthesisr::review_duplicates(it2_dedup$title, exact_duplicates) # Perform a 
-# manual check.
-length(exact_manual$title) # Sum of 16,814 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates) - 1)) # 10,328 documents should be removed.
-it2_dedup <- synthesisr::extract_unique_references(it2_dedup, exact_duplicates) 
-length(it2_dedup$title) # Output after exact matching is 15,535. 10,328 documents removed. 
-## Fuzzy matching five.
-fuzzy_duplicates <- find_duplicates(
-  it2_dedup$title, # Exact match documents as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default cutoff. 
-fuzzy_manual <- review_duplicates(it2_dedup$title, fuzzy_duplicates) # Perform a manual check.
-length(fuzzy_manual$title) #1,357 potential duplicate combinations. I check these candidates manually in 
-# batches. Note that this procedure is prone to error.  
-fuzzy_manual$title[1:500] # All combinations are duplicates.
-fuzzy_manual$title[501:1000] # All combinations are duplicates. 
-fuzzy_manual$title[1001:1357] # 12227 is not a duplicate combination. Remaining combinations are.  
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(12227)) 
-sum(table(fuzzy_duplicates) - 1) # 686 documents should be removed.
-it2_dedup <- extract_unique_references(it2_dedup, fuzzy_duplicates) # Extract unique references.
-length(it2_dedup$title) # De-duplicated output is 14,849. 686 documents were removed.
-## Fuzzy matching ten.
-fuzzy_duplicates <- find_duplicates(
-  it2_dedup$title, # Fuzzy matching five output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 10) # increased cutoff. 
-fuzzy_manual <- synthesisr::review_duplicates(it2_dedup$title, fuzzy_duplicates) # Perform a manual check. 
-length(fuzzy_manual$title) # 453 duplicate combinations.
-fuzzy_manual$title # 93, 153, 221, 1396, 1436, 1721, 1731, 1777, 2570, 2648, 2879, 2879, 2879, 2879, 2879, 
-# 2879, 3700, 4291, 4305, 4403, 4518, 4518, 4875, 5465, 5466, 6010, 6010, 6012, 6702, 11364, 12067, are not 
-# duplicate combinations. 
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
-                                                    c(93, 153, 221, 1396, 1436, 1721, 1731, 1777, 2570, 2648, 
-                                                      2879, 2879, 2879, 2879, 2879, 2879, 3700, 4291, 4305, 
-                                                      4403, 4518, 4518, 4875, 5465, 5466, 6010, 6010, 6012, 
-                                                      6702, 11364, 12067)) 
-sum(table(fuzzy_duplicates) - 1) # 199 documents should be removed.
-it2_dedup <- extract_unique_references(it2_dedup, fuzzy_duplicates) # Extract unique references. 
-length(it2_dedup$title) # De-duplicated output is 14,650. 199 documents removed. 
-## Fuzzy matching fifteen.
-fuzzy_duplicates <- find_duplicates(
-  it2_dedup$title, # Fuzzy matching ten output as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 15) # increased cutoff. 
-fuzzy_manual <- synthesisr::review_duplicates(it2_dedup$title, fuzzy_duplicates) # Perform a manual check. 
-length(fuzzy_manual$title) # 266 duplicate combinations.
-fuzzy_manual$title # 31, 47, 92, 103, 152, 156, 220, 318, 376, 474, 483, 483, 483, 483, 483, 483, 483, 483, 
-# 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 514, 520, 590, 602, 713, 713, 897, 
-# 933, 935, 1131, 1175, 1271, 1388, 1388, 1388, 1388, 1388, 1388, 1466, 1577, 1624, 1716, 1742, 1747, 1762, 
-# 1851, 1934, 1934, 1934, 1934, 1934, 1948, 1948, 1948, 1948, 1948, 1948, 1948, 1948, 1948, 2126, 2162, 2540, 
-# 2549, 2550, 2550, 2571, 2588, 2612, 2628, 2742, 2821, 2828, 2851, 3012, 3145, 3202, 3344, 3430, 3671, 3671, 
-# 3685, 3704, 4180, 4180, 4199, 4259, 4273, 4318, 4808, 4834, 5167, 5231, 5231, 5231, 5421, 5422, 5846, 5918, 
-# 5918, 5918, 6128, 6932, 6932, 6934, 7308, 8168, 9043, 9043, 9884, 11219, 11267, 12001, 12491, are not 
-# duplicate combinations.
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, 
-                                                    c(31, 47, 92, 103, 152, 156, 220, 318, 376, 474, 483, 
-                                                      483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 
-                                                      483, 483, 483, 483, 483, 483, 483, 483, 483, 483, 514, 
-                                                      520, 590, 602, 713, 713, 897, 933, 935, 1131, 1175, 
-                                                      1271, 1388, 1388, 1388, 1388, 1388, 1388, 1466, 1577, 
-                                                      1624, 1716, 1742, 1747, 1762, 1851, 1934, 1934, 1934, 
-                                                      1934, 1934, 1948, 1948, 1948, 1948, 1948, 1948, 1948, 
-                                                      1948, 1948, 2126, 2162, 2540, 2549, 2550, 2550, 2571, 
-                                                      2588, 2612, 2628, 2742, 2821, 2828, 2851, 3012, 3145, 
-                                                      3202, 3344, 3430, 3671, 3671, 3685, 3704, 4180, 4180, 
-                                                      4199, 4259, 4273, 4318, 4808, 4834, 5167, 5231, 5231, 
-                                                      5231, 5421, 5422, 5846, 5918, 5918, 5918, 6128, 6932, 
-                                                      6932, 6934, 7308, 8168, 9043, 9043, 9884, 11219, 11267, 
-                                                      12001, 12491)) 
-sum(table(fuzzy_duplicates) - 1) # 31 documents should be removed.
-it2_dedup <- extract_unique_references(it2_dedup, fuzzy_duplicates) # Extract unique references. 
-length(it2_dedup$title) # De-duplicated output is 14,619 31 documents removed. 
-## Save .ris file of the merged file. 
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2/2. Merged")
-write_refs(it2_dedup, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_refman")
-write_refs(it2_dedup, format = "bib", tag_naming = "synthesisr", file = "it2_dedup_refman")
-# EndNote and Zotero indicate that 48 duplicates remain in the .ris file, which are removed. We furthermore 
-# remove seven retracted papers that are flagged in EndNote and Zotero: "Interprofessional learning in acute 
-# care: Developing a theoretical framework" (1 document), "Bridging the Gap on Facebook: Assessing Intergroup 
-# Contact and Its Effects for Intergroup Relations" (3 documents), "The Evolution of Intergroup Bias: 
-# Perceptions and Attitudes in Rhesus Macaques" (3 documents), "When contact changes minds: An experiment on 
-# transmission of support for gay equality" (2 documents), The result is exported from Zotero in the 
-# file "it2_dedup.ris" which is subsequently imported.  
-it2_dedup <- read_bibliography("it2_dedup.ris")
-length(it2_dedup$title) # 14,562 documents. 57 documents removed. 
-
-### Merged corpus precision diagnostic. For convenience I assume that similarity scores > 0.5 are a match, 
-## and those =< 0.5 are not.
-## Gold standard precision check.
-check_recall(gs_group_contact$title, it2_dedup$title) # 6 of 6 gold standard 
-# articles are retrieved.
-## External precision check.
-sum(round(as.numeric(check_recall(ex_group_contact$title, it2_dedup$title)[, 3]), 0)) # 67 of 98 external 
-# articles are retrieved.
-
-#### Check second iteration search against the naive and first iteration searches. 
-
-### Relative to naive search.
-## Overlap with naive search. Here I do not use the "check_recall" function because it takes a long time, 
-## and it is not exact / conservative enough, for the purpose of merging the naive search documents that are 
-## not in the second iteration search. I do this to try and maximize coverage. 
-overlap_naive_it2 <- bind_rows(naive_dedup, it2_dedup) # Merge corpora. Should be 2,043 + 14,562 = 16,605. 
-## Exact matching.
-length(overlap_naive_it2$title) # Input is 16,605 documents.
-exact_duplicates <- synthesisr::find_duplicates(
-  overlap_naive_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-exact_manual <- synthesisr::review_duplicates(overlap_naive_it2$title, exact_duplicates) # Perform a 
-# manual check.
-length(exact_manual$title) # Sum of 3,906 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates) - 1)) # 1,953 documents should be removed.
-it2_dedup_out_naive <- synthesisr::extract_unique_references(overlap_naive_it2, exact_duplicates) 
-length(it2_dedup_out_naive$title) # Output after exact matching is 14,652. 90 documents remain. 
-## Fuzzy matching five.
-fuzzy_duplicates <- find_duplicates(
-  it2_dedup_out_naive$title, # Exact match documents as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default cutoff. 
-(fuzzy_manual <- review_duplicates(it2_dedup_out_naive$title, fuzzy_duplicates)) # Perform a manual check.
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(14628)) 
-sum(table(fuzzy_duplicates) - 1) # 21 documents should be removed.
-it2_dedup_out_naive <- extract_unique_references(it2_dedup_out_naive, fuzzy_duplicates) # Extract unique 
-# references.
-length(it2_dedup_out_naive$title) # De-duplicated output is 14,631. 69 documents remain.
-## Save .ris file of the merged file. 
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-write_refs(it2_dedup_out_naive, format = "ris", tag_naming = "synthesisr", 
-           file = "it2_dedup_out_naive_refman")
-write_refs(it2_dedup_out_naive, format = "bib", tag_naming = "synthesisr", 
-           file = "it2_dedup_out_naive_refman") # Also save as .bib for importing into Zotero.
-# EndNote and Zotero indicate that three duplicates remain in the .ris file after the de-duplication 
-# procedure, which are removed. Two more retractions are also identified in Zotero: "Ethnic threat and 
-# social control: Examining public support for judicial use of ethnicity in punishment" (2 documents) and 
-# "Structural stigma and all-cause mortality in sexual minority populations" (2 documents). The result is 
-# exported from Zotero in the file "it2_dedup_out_naive.ris" which is subsequently imported.  
-it2_dedup_out_naive <- read_bibliography("it2_dedup_out_naive.ris")
-length(it2_dedup_out_naive$title) # 14,624 documents. 7 documents removed. 62 documents remain.
-
-## Coverage gain relative to the naive iteration search. I define coverage as the sum of the additional 
-## documents that were found relative to the previous search iteration, and the documents from the previous 
-## search iteration that were not identified in the current one.  
-length(naive_dedup$title) # 2,043 articles.
-length(it2_dedup$title) # 14,562 articles.
-((length(it2_dedup$title) - length(naive_dedup$title))) # 12,519 document increase.
-(length(it2_dedup_out_naive$title) - length(it2_dedup$title)) # 62 documents from the naive search not in the
-# first iteration search. Coverage increase of 12,519 + 62 = 12,581 or (12,581 / 2,043) = 6,158 as a factor
-# increase.   
-1 - (length(it2_dedup_out_naive$title) - length(it2_dedup$title)) / length(naive_dedup$title) # 96.97% of 
-# the naive search was in the second iteration search. 
-
-## Relative to first iteration. Note that the naive search articles are also in the first iteration 
-## output object. 
-## Overlap with first iteration search. Here I do not use the "check_recall" function because it takes a 
-## long time, and it is not exact / conservative enough, for the purpose of merging the first iteration 
-## search documents that are not in the second iteration search. I do this to try and maximize coverage. 
-length(it1_dedup_out$title)
-length(it2_dedup_out_naive$title)
-overlap_it1_it2 <- bind_rows(it1_dedup_out, it2_dedup_out_naive) # Merge corpora. Should be 6,410 + 14,624 = 
-# 21,034. 
-## Exact matching.
-length(overlap_it1_it2$title) # Input is 21,034 documents.
-exact_duplicates <- synthesisr::find_duplicates(
-  overlap_it1_it2$title, # Raw import as input;
-  method = "exact", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE) # remove punctuation from input   
-exact_manual <- synthesisr::review_duplicates(overlap_it1_it2$title, exact_duplicates) # Perform a 
-# manual check.
-length(exact_manual$title) # Sum of 11,126 duplicate combinations identified.
-sum(as.numeric(table(exact_duplicates) - 1)) # 5,563 documents should be removed.
-overlap_it1_it2 <- synthesisr::extract_unique_references(overlap_it1_it2, exact_duplicates) 
-length(overlap_it1_it2$title) # Output after exact matching is 15,471. 5,563 documents removed. 847 documents
-# remain.
-## Fuzzy matching five.
-fuzzy_duplicates <- find_duplicates(
-  overlap_it1_it2$title, # Exact match documents as input;
-  method = "string_osa", # method is optimal string alignment (Damerau-Levenshtein distance); 
-  to_lower = TRUE, # convert input to lower case;
-  rm_punctuation = TRUE, # remove punctuation from input;
-  threshold = 5) # default cutoff. 
-(fuzzy_manual <- review_duplicates(overlap_it1_it2$title, fuzzy_duplicates)) # Perform a manual check.
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(5701)) 
-sum(table(fuzzy_duplicates) - 1) # 48 documents should be removed.
-it2_dedup_out <- extract_unique_references(overlap_it1_it2, fuzzy_duplicates) # Extract unique references.
-length(it2_dedup_out$title) # De-duplicated output is 15,423. 48 documents were removed.
-## Save .ris file of the merged file. 
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-write_refs(it2_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_out_refman")
-write_refs(it2_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it2_dedup_out_refman")
-# EndNote and Zotero indicate that 5 duplicates remain in the .ris file after the de-duplication 
-# procedure, which are removed. The result is exported from Zotero in the file "it2_dedup_out_naive.ris" 
-# which is subsequently imported.  
-it2_dedup_out <- read_bibliography("it2_dedup_out.ris")
-length(it2_dedup_out$title) # 15,417 documents. 5 documents removed. 
-
-### Merged corpus precision diagnostic. For convenience I assume that similarity scores > 0.5 are a match, 
-## and those =< 0.5 are not.
-## Gold standard precision check.
-check_recall(gs_group_contact$title, it2_dedup_out$title) # 6 of 6 gold standard articles are retrieved.
-## External precision check.
-check_recall(ex_group_contact$title, it2_dedup_out$title) # 69 of 98 or 70.41% of the external articles are 
-# retrieved.
-
-## Coverage gain relative to the first iteration search. I define coverage as the sum of the additional 
-## documents that were found relative to the previous search iteration, and the documents from the previous 
-## search iteration that were not identified in the current one. 
-length(it1_dedup_out$title) # 6,410 articles.
-length(it2_dedup_out$title) # 15,417 articles.
-(length(it2_dedup_out$title) - length(it1_dedup_out$title)) # 9,007 article increase. 
-(length(it2_dedup_out$title) - length(it2_dedup_out_naive$title)) # 793 documents from the first iteration
-# search were not in the second. Coverage increase of 793 + 9,007 = 9,800 or (9,800 / 6,410) = 1.52 as a 
-# factor increase. 
-1 - (length(it2_dedup_out$title) - length(it2_dedup_out_naive$title)) / length(it1_dedup_out$title) # 87.63%
-# of the first iteration search was in the second iteration search. 
-
-### It is subsequently the question whether we should continue with a third iteration search or not. Note 
-### that approximately 97% of the naive and 88% of the first iteration search is contained in the second 
-### iteration search, and that the second iteration search added approximately 52% in terms of documents to 
-### the first iteration search. The question is at which percentages for these various indicators we should 
-### stop iterating. In theory, we could continue until the coverage increase is 0%, meaning that 100% of the 
-### previous iteration is contained in the current iteration and that nothing is added in terms of additional
-### documents. Due to decreasing returns and increasing computational burden for each additional iteration, 
-### this is not feasible. We can alternatively impose limits on these indicators, i.e., ~90% of the previous 
-### iterations are contained in the current iteration and the coverage increase is <5% for the previous 
-### iteration, respectively, for example. The question is however whether this additional iteration with more 
-### keywords will mostly result in increases in recall or precision. My guess is that it will mostly add to 
-### recall. The ~90% and <5% values are in that sense also arbitrary in that these values might be reached 
-### only long after almost all relevant documents have been found. It might nonetheless be fruitful to keep 
-### iterating as long as some relevant documents are likely to still be identified, and the computational 
-### cost is acceptable, which I judge to still be the case for a third iteration. Finally, because we use 
-### ASReview for screening, we can afford to add proportionally more irrelevant as opposed to relevant 
-### documents. As such, I execute a third iteration. 
+### It is subsequently the question whether we should continue with a second iteration search or not. 53.90% 
+### of the naive search was contained in the first iteration search. An increase of 11,851 documents however 
+### only added 3 documents in the accuracy set. Another issue is that we have retrieved a total of 31,289 
+### documents, meaning that any subsequent iteration will be laborious, both in a computational and time 
+### sense. Put differently, given the strategy of choice, and the associated computational and time costs, 
+### do we expect to retrieve many more relevant documents? I make the judgment that we will probably not 
+### obtain many more relevant documents given what is required to obtained it. As such, I terminate the 
+### search after this first iteration.
 
 ###########################
 ##### ASReview export #####
@@ -2055,18 +1419,31 @@ length(it2_dedup_out$title) # 15,417 articles.
 
 ### Export the final document set as input for screening in ASReview.
 ## Data frame of the title, abstract, author, and year of publication. 
-asreview_group_contact <- as.data.frame(cbind(it3_dedup_out$title, it3_dedup_out$abstract, 
-                                              it3_dedup_out$author, it3_dedup_out$year))
+asreview_socialization <- as.data.frame(cbind(it1_dedup_out$title, it1_dedup_out$abstract, 
+                                              it1_dedup_out$author, it1_dedup_out$year))
 ## Assign column names.
-colnames(asreview_group_contact) <- c("Title", "Abstract", "Author", "Year")
-## Final number of articles.
-length(asreview_group_contact$Title) # 20,955 candidate articles for the group contact determinant. 
-## Write result as a .csv file.
-write.csv(asreview_group_contact, paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. G", 
-                                         "roup contact/6. ASReview/ASReview_input_group_contact.csv"))
+colnames(asreview_socialization) <- c("Title", "Abstract", "Author", "Year")
 
-## Note that the .csv file is cleaned one more time before entering it into ASReview. We furthermore do not
-## address missing values.
+## Adding those gold standard articles that were published before 2010. These need to be added so that they 
+## can be used as prior information in ASReview. Start with data frame of the title, abstract, author, and 
+## year of publication. 
+gs_to_asreview <- as.data.frame(cbind(gs_socialization$title, gs_socialization$abstract, 
+                                      gs_socialization$author, gs_socialization$year))
+## Select articles published before 2010.
+gs_to_asreview <- gs_to_asreview[c(4), ]
+## Assign column names.
+colnames(gs_to_asreview) <- c("Title", "Abstract", "Author", "Year")
+
+## Row bind the two article document sets.
+asreview_socialization <- rbind(asreview_socialization, gs_to_asreview)
+## Final number of articles.
+length(asreview_socialization$Title) # 31,290 candidate articles for the socialization determinant. 
+## Write result as a .csv file.
+write.csv(asreview_socialization, paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Sociali", 
+                                         "zation/4. ASReview/ASReview_input_socialization.csv"))
+
+## The .csv file is cleaned one more time before entering it into ASReview. More specifically, some 
+## conversion errors might have occurred in the .csv file which are addressed manually. 
 
 #########################################################
 ##### Inter-rater reliability and power calculation #####

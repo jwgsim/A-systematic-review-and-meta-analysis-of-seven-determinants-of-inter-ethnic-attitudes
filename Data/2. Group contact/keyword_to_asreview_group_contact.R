@@ -720,14 +720,7 @@ length(all_keywords) # 114 keyword candidates.
 ### connecting the pair" (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). "The network constructed in this 
 ### manner represents cumulative knowledge of a domain and helps to uncover meaningful knowledge components 
 ### and insights based on the patterns and strength of links between keywords that appear in the literature" 
-### (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). I furthermore combine the second iteration keywords 
-## with the naive keywords. I add the naive keywords to the keyword candidate selection under the assumption 
-## that these are important keywords because they were obtained from the gold standard articles, and should 
-## therefore be considered explicitly in the KCN analysis, even though they are implicitly represented.
-all_keywords_final <- c()
-all_keywords_final <- append(all_keywords_final, c(as.vector(unlist(gs_grouped_terms)), all_keywords))
-all_keywords_final <- remove_redundancies(all_keywords_final, closure = "full") # Remove duplicates. 
-length(all_keywords_final) # 126 candidates.
+### (Radhakrishnan, Erbis, Isaacs, & Kamarthi, 2017). 
 ## Build the keyword co-occurrence network. This chunk of code is a reworked version of the tutorial at: 
 ## https://luketudge.github.io/litsearchr-tutorial/litsearchr_tutorial.html.
 filter_dfm <- litsearchr::create_dfm(
@@ -754,14 +747,8 @@ term_strengths <- term_strengths[-c(2, 7, 9, 13, 20, 22, 32, 36, 37, 47, 52, 55,
 keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:60, ]$term)
 (keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1")
-sink("first_iteration_selected_terms_ovid_scopus_wos.txt")
-print(keywords_ovid_scopus_wos)
-sink() 
 ## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_ovid_scopus_wos <- list(
   determinant = keywords_ovid_scopus_wos[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
                                            21, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 37, 39, 40, 41, 43, 
@@ -809,14 +796,8 @@ sink()
 keywords_proquest <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:48, ]$term)
 (keywords_proquest <- keywords_proquest[order(keywords_proquest)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/3. Iteration 1")
-sink("first_iteration_selected_terms_proquest.txt")
-print(keywords_proquest)
-sink() 
 ## Categorize "keywords_proquest" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_proquest <- list(
   determinant = keywords_proquest[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 22, 
                                     23, 24, 26, 27, 28, 39, 31, 32, 34, 35, 37, 39, 43, 44, 45, 46)],
@@ -1403,14 +1384,8 @@ term_strengths <- term_strengths[-c(2, 3, 13, 17, 18, 22, 24, 27, 29, 32, 36, 39
 keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:60, ]$term)
 (keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-sink("second_iteration_selected_terms_ovid_scopus_wos.txt")
-print(keywords_ovid_scopus_wos)
-sink() 
 ## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_ovid_scopus_wos <- list(
   determinant = keywords_ovid_scopus_wos[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
                                            20, 21, 22, 23, 25, 26, 28, 29, 30, 31, 34, 35, 36, 38, 40, 41, 
@@ -1458,14 +1433,8 @@ sink()
 keywords_proquest <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:36, ]$term)
 (keywords_proquest <- keywords_proquest[order(keywords_proquest)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/4. Iteration 2")
-sink("second_iteration_selected_terms_proquest.txt")
-print(keywords_proquest)
-sink() 
 ## Categorize "keywords_proquest" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_proquest <- list(
   determinant = keywords_proquest[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 20, 21, 22, 
                                     24, 26, 28, 32, 34, 35, 36)],
@@ -2150,14 +2119,8 @@ term_strengths <- term_strengths[-c(6, 9, 14, 17, 19, 22, 24, 27, 31, 34, 43, 44
 keywords_ovid_scopus_wos <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:58, ]$term)
 (keywords_ovid_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/5. Iteration 3")
-sink("third_iteration_selected_terms_ovid_scopus_wos.txt")
-print(keywords_ovid_scopus_wos)
-sink() 
 ## Categorize "keywords_ovid_scopus_wos" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_ovid_scopus_wos <- list(
   determinant = keywords_ovid_scopus_wos[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,
                                            21, 22, 23, 27, 29, 30, 31, 32, 34, 36, 38, 41, 42, 49, 52, 54, 
@@ -2206,14 +2169,8 @@ sink()
 keywords_proquest <- as.character(term_strengths[order(term_strengths$strength, decreasing = T), 
 ][1:40, ]$term)
 (keywords_proquest <- keywords_proquest[order(keywords_proquest)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/5. Iteration 3")
-sink("third_iteration_selected_terms_proquest.txt")
-print(keywords_proquest)
-sink() 
 ## Categorize "keywords_proquest" object based on keyword being a potential dependent or independent 
-## variable of interest in the group threat on inter-ethnic attitudes relationship.
+## variable of interest in the group contact on inter-ethnic attitudes relationship.
 grouped_terms_proquest <- list(
   determinant = keywords_proquest[c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 16, 17, 18, 19, 22, 25, 31, 34, 36, 
                                     37, 38, 39, 40)],
@@ -2829,13 +2786,13 @@ asreview_group_contact <- as.data.frame(cbind(it3_dedup_out$title, it3_dedup_out
 ## Assign column names.
 colnames(asreview_group_contact) <- c("Title", "Abstract", "Author", "Year")
 ## Final number of articles.
-length(asreview_group_contact$Title) # 20,955 candidate articles for the group threat determinant. 
+length(asreview_group_contact$Title) # 20,955 candidate articles for the group contact determinant. 
 ## Write result as a .csv file.
 write.csv(asreview_group_contact, paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/2. G", 
                                          "roup contact/6. ASReview/ASReview_input_group_contact.csv"))
 
-## Note that the .csv file is cleaned one more time before entering it into ASReview. We furthermore do not
-## address missing values.
+## The .csv file is cleaned one more time before entering it into ASReview. More specifically, some 
+## conversion errors might have occurred in the .csv file which are addressed manually. 
 
 #########################################################
 ##### Inter-rater reliability and power calculation #####

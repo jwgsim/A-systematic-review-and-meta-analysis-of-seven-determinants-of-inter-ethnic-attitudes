@@ -1,0 +1,19 @@
+$determinant
+ [1] "attitude development"      "child development"         "children"                  "classroom"                
+ [5] "elementary school"         "family members"            "family relations"          "friends"                  
+ [9] "group identification"      "group identity"            "group norms"               "high school"              
+[13] "high school student"       "identity development"      "ingroup socialization"     "middle school"            
+[17] "parental attitude"         "parental socialization"    "parents"                   "peer group"               
+[21] "peer socialization"        "peers"                     "primary school"            "public schools"           
+[25] "racial identity"           "school"                    "school children"           "school environment"       
+[29] "school students"           "school teachers"           "secondary school"          "secondary school students"
+[33] "social context"            "social environment"        "social identity theory"    "social norms"             
+[37] "socialization"             "student attitude"          "teacher attitudes"         "young adults"             
+[41] "youth attitudes"          
+
+$outcome
+ [1] "anti-immigrant attitudes" "anti-immigrant sentiment" "ethnic attitudes"         "ethnic prejudice"        
+ [5] "ethnic relations"         "intergroup anxiety"       "intergroup attitudes"     "negative stereotypes"    
+ [9] "outgroup attitudes"       "prejudice"                "prejudice reduction"      "prejudicial attitudes"   
+[13] "racial attitudes"         "racial prejudice"         "reduce prejudice"         "social prejudice"        
+

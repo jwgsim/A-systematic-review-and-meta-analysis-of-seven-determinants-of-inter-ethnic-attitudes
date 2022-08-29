@@ -1,6 +1,0 @@
- [1] "group threat"                 "inter-ethnic attitudes"       "anti-foreigner sentiment"     "attitudes toward immigration" "group competition"           
- [6] "economic self-interest"       "ethnic exclusionism"          "group position"               "intergroup relations"         "minority populations"        
-[11] "opposition to immigration"    "perceived group threat"       "perceived size"               "prejudice"                    "race prejudice"              
-[16] "racial policy"                "racial prejudice"             "relative size"                "self-interest"                "size of immigrant population"
-[21] "symbolic racism"              "white racial-attitudes"       "xenophobia"                   "anti-immigrant attitudes"     "conflict theory"             
-[26] "group conflict"               "group conflict theory"       

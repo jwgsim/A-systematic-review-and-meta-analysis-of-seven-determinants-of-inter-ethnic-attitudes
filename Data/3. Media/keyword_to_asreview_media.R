@@ -178,7 +178,7 @@ writeLines(bool, "naive_bool_wos.txt")
 file.remove("search-inEnglish.txt") # Remove source file. 
 ## Finally save the grouped terms to a text file in the working directory. I do this to keep the search 
 ## reproducible in case some previous chunk of code does not replicate for some reason.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/2. Group contact/2. Naive search") # Set 
+setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/3. Media/2. Naive search") # Set 
 sink("naive_search_terms.txt")
 print(gs_grouped_terms)
 sink()
@@ -472,7 +472,7 @@ ggVennDiagram(list(naive_dedup_ovid$title, naive_dedup_proquest$title, naive_ded
 ### specifically, we enter the title of each gold standard article on the "connectedpapers.com" website, and 
 ### select all papers that are suggested in the resulting network, and all papers under the "Derivative 
 ### works" tab, that were published between the 2010-2022 period and are relevant to the query of interest
-### as judged by the corresponding author, here the effect of group contact on inter-ethnic attitudes. 98 
+### as judged by the corresponding author, here the effect of media on inter-ethnic attitudes. 45 
 ### such external articles were identified. The following information is listed on the "connectedpapers.com"
 ### website on their methodology: "To create each graph, we analyze an order of ~50,000 papers and select the 
 ### few dozen with the strongest connections to the origin paper. In the graph, papers are arranged 
@@ -687,14 +687,13 @@ keyword_candidates <- remove_redundancies(c(raked_keywords, tagged_keywords), cl
 length(keyword_candidates) # Total of 475 keyword candidates. 
 ## The subsequent task is to select all keywords that are relevant to our query from the candidate pool. I 
 ## select terms that relate in content to the relevant literature, i.e., are a independent or dependent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship. Note that I interpret 
+## variable of interest in the media on inter-ethnic attitudes relationship. Note that I interpret 
 ## relevance quite broadly, since these terms will be will be ranked and filtered further based on their 
 ## "connectedness" in a co-occurrence network. In that sense, it is better too be too liberal than too 
 ## selective in our choices here, since it might be hard to anticipate which relevant terms are important 
 ## from this "connectedness" perspective. I furthermore do not include keywords which relate directly to any 
 ## of the other paradigms, e.g., I do not include keywords on group threat theory even though these might 
-## appear often in the group contact literature. Finally note that I do this part manually, which is prone to 
-## errors. 
+## appear often in the media literature. Finally note that I do this part manually, which is prone to errors.
 all_keywords <- keyword_candidates[
   c(56, 111, 115, 119, 123, 124, 125, 126, 128, 129, 130, 132, 133, 134, 135, 136, 139, 140, 141, 142, 143, 
     145, 146, 150, 155, 156, 160, 166, 168, 169, 171, 174, 178, 196, 198, 215, 216, 223, 226, 230, 232, 239, 
@@ -742,12 +741,6 @@ term_strengths <- term_strengths[-c(5, 29, 50, 72, 73, 74, 75), ]
 
 ### Construct Boolean search OVID, Web of Science, and Scopus.
 keywords_ovid_proquest_scopus_wos <- as.character(term_strengths$term)
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/3. Media/3. Iteration 1")
-sink("first_iteration_selected_terms_ovid_proquest_scopus_wos.txt")
-print(keywords_ovid_proquest_scopus_wos)
-sink() 
 ## Categorize "keywords_ovid_proquest_scopus_wos" object based on keyword being a potential dependent or independent 
 ## variable of interest in the group threat on inter-ethnic attitudes relationship.
 grouped_terms_ovid_proquest_scopus_wos <- list(
@@ -1292,14 +1285,13 @@ keyword_candidates <- remove_redundancies(c(tagged_keywords, raked_keywords), cl
 length(keyword_candidates) # Total of 983 keyword candidates. 
 ## The subsequent task is to select all keywords that are relevant to our query from the candidate pool. I 
 ## select terms that relate in content to the relevant literature, i.e., are a independent or dependent 
-## variable of interest in the group contact on inter-ethnic attitudes relationship. Note that I interpret 
+## variable of interest in the media on inter-ethnic attitudes relationship. Note that I interpret 
 ## relevance quite broadly, since these terms will be will be ranked and filtered further based on their 
 ## "connectedness" in a co-occurrence network. In that sense, it is better too be too liberal than too 
 ## selective in our choices here, since it might be hard to anticipate which relevant terms are important 
 ## from this "connectedness" perspective. I furthermore do not include keywords which relate directly to any 
 ## of the other paradigms, e.g., I do not include keywords on group threat theory even though these might 
-## appear often in the group contact literature. Finally note that I do this part manually, which is prone to 
-## errors. 
+## appear often in the media literature. Finally note that I do this part manually, which is prone to errors.
 all_keywords <- keyword_candidates[
   c(49, 51, 53, 86, 168, 173, 176, 183, 198, 199, 200, 201, 202, 203, 204, 205, 206, 227, 231, 232, 260, 275,
     290, 291, 305, 350, 355, 362, 363, 396, 454, 474, 622, 623, 628, 638, 643, 646, 647, 648, 649, 650, 652, 
@@ -1349,12 +1341,6 @@ term_strengths <- term_strengths[-c(39, 49, 55, 66, 81, 84, 89, 90, 101), ]
 ## Select first 60 terms from filtered term set. 
 keywords_ovid_proquest_scopus_wos <- as.character(term_strengths$term)
 (keywords_ovid_proquest_scopus_wos <- keywords_ovid_scopus_wos[order(keywords_ovid_scopus_wos)])
-## Save the grouped terms to a text file in the working directory. I do this to keep the search reproducible 
-## in case some previous chunk of code does not replicate.
-setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/3. Media/4. Iteration 2")
-sink("second_iteration_selected_terms_ovid_proquest_scopus_wos.txt")
-print(keywords_ovid_proquest_scopus_wos)
-sink() 
 ## Categorize "keywords_ovid_proquest_scopus_wos" object based on keyword being a potential dependent or independent 
 ## variable of interest in the group threat on inter-ethnic attitudes relationship.
 grouped_terms_ovid_proquest_scopus_wos <- list(
@@ -1686,14 +1672,14 @@ fuzzy_duplicates <- find_duplicates(
   rm_punctuation = TRUE, # remove punctuation from input;
   threshold = 5) # default cutoff. 
 fuzzy_manual <- review_duplicates(it2_dedup$title, fuzzy_duplicates) # Perform a manual check.
-length(fuzzy_manual$title) #1,864 potential duplicate combinations. I check these candidates manually in 
+length(fuzzy_manual$title) # 933 potential duplicate combinations. I check these candidates manually in 
 # batches. Note that this procedure is prone to error.  
-fuzzy_manual$title[1:500] # All combinations are duplicates.
-fuzzy_manual$title[501:1000] # 6013, 6013, 6013, 6013, 6015, are not duplicate combinations. Remaining ones are. 
-fuzzy_manual$title[1001:1500] # All combinations are duplicates.
-fuzzy_manual$title[1501:1864] # All combinations are duplicates.
-fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(6013, 6013, 6013, 6013, 6015)) 
-sum(table(fuzzy_duplicates) - 1) # 940 documents should be removed.
+fuzzy_manual$title[1:500] # 1970, 3091, 3091, 3091, 3091, are not duplicate combinations. Remaining 
+# combinations are. 
+fuzzy_manual$title[501:933] # 3753, 7294, 9362, are not duplicate combinations. Remaining ones are. 
+fuzzy_duplicates <- synthesisr::override_duplicates(fuzzy_duplicates, c(1970, 3091, 3091, 3091, 3091,
+                                                                        3753, 7294, 9362)) 
+sum(table(fuzzy_duplicates) - 1) # 464 documents should be removed.
 it2_dedup <- extract_unique_references(it2_dedup, fuzzy_duplicates) # Extract unique references.
 length(it2_dedup$title) # De-duplicated output is 19,689. 940 documents were removed.
 ## Fuzzy matching ten.
@@ -1925,8 +1911,8 @@ length(asreview_media$Title) # 26,761 candidate articles for the media determina
 write.csv(asreview_media, paste0("C:/Academia/PhD/Meta-analysis paper/Literature data/3. Media", 
                                  "/5. ASReview/ASReview_input_media.csv"))
 
-## Note that the .csv file is cleaned one more time before entering it into ASReview. We furthermore do not
-## address missing values.
+## The .csv file is cleaned one more time before entering it into ASReview. More specifically, some 
+## conversion errors might have occurred in the .csv file which are addressed manually. 
 
 #########################################################
 ##### Inter-rater reliability and power calculation #####
@@ -1952,8 +1938,8 @@ lambda <- qnorm(p = 0.05 / 2, lower.tail = FALSE) - (- qnorm(power)) # Two-taile
 foo1 <- ((avg + avg) / ((avg) * (avg))) + ((es ^ 2) / (2 * (avg + avg)))
 foo2 <- het * (foo1)
 v_star <- foo1 + foo2
-(k <- (v_star * (lambda ** 2)) / (es ** 2)) # ~40 studies at a minimum for media paradigm. Thus: 
-# simple random sample over the literature retrieved in ASReview should have a size 40 at least. 
+(k <- (v_star * (lambda ** 2)) / (es ** 2)) # ~40 studies at a minimum for media paradigm. Thus: simple 
+# random sample over the literature retrieved in ASReview should have a size 40 at least. 
 
 ######################
 ##### References #####

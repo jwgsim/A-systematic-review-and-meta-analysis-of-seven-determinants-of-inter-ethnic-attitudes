@@ -1,8 +1,0 @@
- [1] "contact experiences"          "contact hypothesis"           "contact theory"               "direct contact"               "ethnic group"                
- [6] "ethnic minority"              "group identity"               "group members"                "identity theory"              "ingroup members"             
-[11] "intergroup anxiety"           "intergroup attitudes"         "intergroup conflict"          "intergroup contact"           "intergroup relations"        
-[16] "majority group"               "majority group members"       "minority group"               "minority group members"       "negative attitude"           
-[21] "outgroup attitudes"           "outgroup member"              "perceived discrimination"     "positive attitude"            "positive contact"            
-[26] "prejudice"                    "prejudice reduction"          "public attitude"              "public opinion"               "racial attitudes"            
-[31] "racial group"                 "racial prejudice"             "reduce prejudice"             "social contact"               "social distance"             
-[36] "social dominance orientation" "social group"                 "social identity"              "social identity theory"       "social interaction"          
