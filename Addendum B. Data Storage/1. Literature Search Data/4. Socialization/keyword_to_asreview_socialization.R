@@ -1372,7 +1372,7 @@ setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/4. Socialization/3. I
 write_refs(it1_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
 # as .ris. 
 write_refs(it1_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
-# as .bib for Zotero. 
+# as .bib for importing into Zotero, which does not accept the .ris file.  
 # EndNote and Zotero indicate that six duplicates remain in the .ris file, which are removed. In addition, 
 # four more retractions were identified: "Helping the ingroup versus harming the outgroup: Evidence from 
 # morality-based groups" (2), "Structural stigma and all-cause mortality in sexual minority populations" (2), 

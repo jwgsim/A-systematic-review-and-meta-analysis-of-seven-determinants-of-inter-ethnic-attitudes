@@ -1234,7 +1234,7 @@ setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/3. It
 write_refs(it1_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
 # as .ris. 
 write_refs(it1_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it1_dedup_out_refman") # Export
-# as .bib for Zotero. 
+# as .bib for importing into Zotero, since Zotero does not accept the .ris file.  
 # EndNote and Zotero indicate that two duplicates remain in the .ris file, which are removed. The result is 
 # exported from Zotero in the file "it1_dedup_out.ris" which is subsequently imported.  
 it1_dedup_out <- read_bibliography("it1_dedup_out.ris")
@@ -1943,9 +1943,9 @@ length(it2_dedup_out_naive$title) # De-duplicated output is 17,946. 10 documents
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/4. Iteration 2")
 write_refs(it2_dedup_out_naive, format = "ris", tag_naming = "synthesisr", 
-           file = "it2_dedup_out_naive_refman")
+           file = "it2_dedup_out_naive_refman") # Export as .ris file. 
 write_refs(it2_dedup_out_naive, format = "bib", tag_naming = "synthesisr", 
-           file = "it2_dedup_out_naive_refman") # Also save as .bib for importing into Zotero.
+           file = "it2_dedup_out_naive_refman") # Also export as .bib file for importing into Zotero.
 # EndNote and Zotero indicate that three duplicates remain in the .ris file after the de-duplication 
 # procedure, which are removed. The result is exported from Zotero in the file "it2_dedup_out_naive.ris" 
 # which is subsequently imported.  
@@ -2000,8 +2000,10 @@ it2_dedup_out <- extract_unique_references(overlap_it1_it2, fuzzy_duplicates) # 
 length(it2_dedup_out$title) # De-duplicated output is 18,473. 30 documents were removed.
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/4. Iteration 2")
-write_refs(it2_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_out_refman")
-write_refs(it2_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it2_dedup_out_refman")
+write_refs(it2_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it2_dedup_out_refman") # Export
+# as .ris file. 
+write_refs(it2_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it2_dedup_out_refman") # Export
+# as .bib file for importing into Zotero.
 # EndNote and Zotero indicate that 15 duplicates remain in the .ris file after the de-duplication 
 # procedure, which are removed. The result is exported from Zotero in the file "it2_dedup_out_naive.ris" 
 # which is subsequently imported.  
@@ -2624,8 +2626,10 @@ fuzzy_manual$title # None of the combinations are duplicates.
 length(it3_dedup$title) # De-duplicated output is 17,471.  
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/5. Iteration 3/2. Merged")
-write_refs(it3_dedup, format = "ris", tag_naming = "synthesisr", file = "it3_dedup_refman")
-write_refs(it3_dedup, format = "bib", tag_naming = "synthesisr", file = "it3_dedup_refman")
+write_refs(it3_dedup, format = "ris", tag_naming = "synthesisr", file = "it3_dedup_refman") # Export as .ris
+# file.
+write_refs(it3_dedup, format = "bib", tag_naming = "synthesisr", file = "it3_dedup_refman") # Also export as 
+# .bib file for importing into Zotero.
 # EndNote and Zotero indicate that 29 duplicates remain in the .ris file, which are removed. We furthermore 
 # remove seven retracted papers that are flagged in EndNote: "The Evolution of Intergroup Bias: 
 # Perceptions and Attitudes in Rhesus Macaques", "The Social Context of Latino Threat and Punitive Latino 
@@ -2681,9 +2685,9 @@ length(it3_naive_dedup_out$title) # De-duplicated output is 17,675. 13 documents
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/5. Iteration 3")
 write_refs(it3_naive_dedup_out, format = "ris", tag_naming = "synthesisr", 
-           file = "it3_naive_dedup_out_refman")
+           file = "it3_naive_dedup_out_refman") # Export as .ris file. 
 write_refs(it3_naive_dedup_out, format = "bib", tag_naming = "synthesisr", 
-           file = "it3_naive_dedup_out_refman")
+           file = "it3_naive_dedup_out_refman") # Also export as .bib file for importing into Zotero.
 # EndNote and Zotero indicate that 8 duplicates remain in the .ris file, which are removed. The result is 
 # exported from Zotero in the file "it3_dedup.ris" which is subsequently imported. 
 it3_naive_dedup_out <- read_bibliography("it3_naive_dedup_out.ris")
@@ -2735,7 +2739,9 @@ length(it3_it1_dedup_out$title) # De-duplicated output is 18,484. 54 documents w
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/5. Iteration 3")
 write_refs(it3_it1_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it3_it1_dedup_out_refman")
+# Export as .ris file.
 write_refs(it3_it1_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it3_it1_dedup_out_refman")
+# Also export as .bib file for importing into Zotero.
 # EndNote indicates that 7 duplicates remain in the .ris file after the de-duplication procedure. These 
 # documents were removed manually in EndNote, for a final sum total of  documents. After manually 
 # removing the duplicate documents from the "it3_it1_dedup_out.ris" in EndNote, I overwrite the original 
@@ -2788,8 +2794,10 @@ it3_dedup_out <- extract_unique_references(it3_dedup_out, fuzzy_duplicates) # Ex
 length(it3_dedup_out$title) # De-duplicated output is 20,323. 57 documents were removed.
 ## Save .ris file of the merged file. 
 setwd("C:/Academia/PhD/Meta-analysis paper/Literature data/1. Group threat/5. Iteration 3")
-write_refs(it3_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it3_dedup_out_refman")
-write_refs(it3_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it3_dedup_out_refman")
+write_refs(it3_dedup_out, format = "ris", tag_naming = "synthesisr", file = "it3_dedup_out_refman") # Export
+# as .ris file. 
+write_refs(it3_dedup_out, format = "bib", tag_naming = "synthesisr", file = "it3_dedup_out_refman") # Also
+# export as .bib file for importing into Zotero.
 # EndNote indicates that 5 duplicates remain in the .ris file after the de-duplication procedure. These 
 # documents were removed manually in EndNote, for a final sum total of  documents. After manually removing 
 # the duplicate documents from the "it3_dedup_out.ris" in EndNote, I overwrite the original 
