@@ -1,2 +1,1 @@
-Note that the .bib data files generated in the R-script associated with the various determinants are not included in this repository. These were excluded 
-due to their size. These can be requested from the corresponding author at j.g.simons@uu.nl
+Note that the .bib data files generated in the R-script associated with the various determinants are not included in this repository. These were excluded due to their being too large for direct publishing on GitHub. These can be requested for download from the corresponding author at the following e-mail adress: j.g.simons@uu.nl.

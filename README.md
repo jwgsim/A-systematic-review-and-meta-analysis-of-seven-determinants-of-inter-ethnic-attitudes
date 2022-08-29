@@ -1,5 +1,5 @@
 ### Research Archive - A systematic review and meta-analysis of the comparative effects of group threat, group contact, socialization, media, and the demographics age, sex, and education, on majority to minority directed inter-ethnic attitudes in English, peer-reviewed research articles published in the 2010-2022 period.
-This repository contains files for replicating the manuscript "A systematic review and meta-analysis of the comparative effects of group threat, group contact, socialization, media, and the demographics age, sex, and education, on majority to minority directed inter-ethnic attitudes in English, peer-reviewed research articles published during the 2010-2022 period". It additionally includes statements on registration, data storage, privacy, and permission and access. 
+This repository contains files that are required for replicating the manuscript "A systematic review and meta-analysis of the comparative effects of group threat, group contact, socialization, media, and the demographics age, sex, and education, on majority to minority directed inter-ethnic attitudes in English, peer-reviewed research articles published during the 2010-2022 period". It additionally includes statements on registration, data storage, privacy, and permission and access. 
 
 | Folder | Description |
 | ----------- | ----------- |
